@@ -32,7 +32,7 @@
                   <i className="bi bi-telephone"></i> <strong>+91 9958795117</strong>
                 </p>
                 <hr />
-                <p><i className="bi bi-envelope"></i> info@digivera.in</p>
+                <p><i className="bi bi-envelope"></i> customersupport@digivera.co.in</p>
                 <hr />
                 <p><i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India</p>
               </div>

@@ -15,7 +15,7 @@
             />
             {/* COUNTER BOX */}
             <div className="ab-exp-box wow fadeInLeft" data-wow-delay="0.7s">
-              <h2><span id="expCount">0</span>+</h2>
+              <h2><span id="expCount">7</span>+</h2>
               <p>Years Experience</p>
             </div>
           </div>
