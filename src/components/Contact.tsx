@@ -126,7 +126,6 @@ const Contact = () => {
                 <p className="call_ct">
                   <i className="bi bi-telephone"></i> <strong>+91 9958795117</strong>
                 </p>
-               
                 <p><i className="bi bi-envelope"></i> customersupport@digivera.co.in</p>
                
                 <p><i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India</p>
