@@ -8,7 +8,9 @@ type ContactFormData = {
   message: string;
 };
 
-const CONTACT_API_URL ='https://processmail.md-client.com/api/inquiry';
+const CONTACT_API_URL =
+  ((import.meta.env.VITE_CONTACT_API_URL as string | undefined)?.trim() ||
+    '/api');
 const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
