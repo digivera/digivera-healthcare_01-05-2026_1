@@ -116,27 +116,25 @@ const Contact = () => {
         <div className="row align-items-start">
 
           {/* LEFT SIDE */}
-          <div className="col-lg-5 mb-4">
-            <div className="w-100 wow fadeInLeft" data-wow-delay="0.1s">
-              <h4 className="ct-heading">
+          <div className="col-lg-12 mb-4">
+            <div className="w-100 wow fadeInLeft text-center" data-wow-delay="0.1s">
+              <h3 className="ct-heading">
                 Have any query?<br />Feel Free to Contact Us
-              </h4>
-              <p className="ct-text">
-                Fill out the form below to schedule an appointment or inquire about our services.
-              </p>
+              </h3>
+             
               <div className="ct-info">
                 <p className="call_ct">
                   <i className="bi bi-telephone"></i> <strong>+91 9958795117</strong>
                 </p>
-                <hr />
+               
                 <p><i className="bi bi-envelope"></i> customersupport@digivera.co.in</p>
-                <hr />
+               
                 <p><i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India</p>
               </div>
             </div>
           </div>
 
-          {/* RIGHT FORM */}
+          {/* RIGHT FORM — hidden
           <div className="col-lg-7">
             <form className="ct-form wow fadeInRight" data-wow-delay="0.1s" onSubmit={handleSubmit} noValidate>
               {submitMessage && (
@@ -202,6 +200,7 @@ const Contact = () => {
               </div>
             </form>
           </div>
+          */}
 
         </div>
       </div>
