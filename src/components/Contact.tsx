@@ -126,7 +126,7 @@ const Contact = () => {
               </p>
               <div className="ct-info">
                 <p className="call_ct">
-                  <i className="bi bi-telephone"></i> <strong>+91 995879511</strong>
+                  <i className="bi bi-telephone"></i> <strong>+91 9958795117</strong>
                 </p>
                 <hr />
                 <p><i className="bi bi-envelope"></i> customersupport@digivera.co.in</p>
