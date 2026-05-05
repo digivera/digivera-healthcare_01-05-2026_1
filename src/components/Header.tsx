@@ -26,7 +26,7 @@ const Header = () => {
             <div className="d-flex ctop callus wow fadeInLeft" data-wow-delay="0.1s">
               <i className="bi bi-telephone"></i>{' '}
               <span>
-                <strong>Call Now</strong> +91 9958795117
+                <strong>Call Now</strong> +91 8796294441
               </span>
             </div>
 
@@ -39,7 +39,10 @@ const Header = () => {
             <div className="d-flex ctop emailus wow fadeInRight" data-wow-delay="0.1s">
               <i className="bi bi-envelope"></i>{' '}
               <span>
-                <strong>Email Now</strong> info@digivera.in
+                <strong>Email Now</strong>
+                <a className="email-link" href="mailto:customersupport@digivera.co.in">
+                  customersupport@digivera.co.in
+                </a>
               </span>
             </div>
           </div>

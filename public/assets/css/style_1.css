@@ -346,9 +346,9 @@ a.hx-btn {
     margin-right: 12px;
 }
 .ctop span {
-    width: 134px;
+    width: 264px;
     text-align: left;
-    line-height: 18px;
+    line-height: 22px;
     font-size: 16px;
 }
 .ctop span strong {
@@ -356,18 +356,12 @@ a.hx-btn {
     float: left;
     font-size: 18px;
 }
-.emailus span {
-  width: auto;
-  max-width: 264px;
-  
+.emailus span strong {
+    text-align: right;
 }
-.emailus .email-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  line-height: 1.4;
+.emailus i {
+    margin-right: 0;
+	margin-left: 12px;
 }
 .hx-header .container {
     position: relative;
@@ -1291,12 +1285,20 @@ h5, .h5 {
     color: #1c398e;
 }
 .locationmap, .top-right-menu {
-    width: 48%;
     font-size: 12px;
     padding: 6px 0 4px;
 }
-.callus, .emailus {
+.locationmap {
+    width: 42%;
+}
+.top-right-menu {
+    width: 54%;
+}
+.callus {
     width: 30%;
+}
+.emailus {
+        width: 100%;
 }
 .logobox {
     width: 38%;
@@ -1313,14 +1315,8 @@ a.brandlogo {
 .ctop span {
     font-size: 13px;
 }
-.ctop i {
-	display: none;
-}
 .emailus span {
 	text-align: right;
-}
-.emailus .email-link {
-  max-width: 100%;
 }
 .navigation_sec {
     position: relative;
@@ -1410,5 +1406,35 @@ button.navbar-toggler {
 }
 .lb-tag {
     display: block;
+}
+.ctop span {
+    width: 98px;
+    line-height: 18px;
+}
+.emailus span {
+    text-align: center;
+    width: 100%;
+}
+.emailus span strong {
+    text-align: center;
+}
+.emailus i {
+    display: none;
+}
+.logobox {
+    width: 154px;
+}
+.callus {
+    width: 135px;
+}
+.header {
+    flex-direction: row-reverse;
+}
+.ctop i {
+    margin-right: 6px;
+}
+.hx-topbar .container {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
 }
 }
