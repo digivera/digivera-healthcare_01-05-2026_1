@@ -9,7 +9,6 @@ import Clients from '../components/Clients';
 import Industries from '../components/Industries';
 import Contact from '../components/Contact';
 import Testimonials from '../components/Testimonials';
-import Blog from '../components/Blog';
 import Footer from '../components/Footer';
 
 const Dashboard = () => {
@@ -26,7 +25,6 @@ const Dashboard = () => {
       <Industries />
       <Contact />
       <Testimonials />
-      <Blog />
       <Footer />
       
     </>

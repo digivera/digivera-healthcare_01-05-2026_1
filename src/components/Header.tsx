@@ -13,8 +13,7 @@ const Header = () => {
             <Link to="/">Home</Link> /{' '}
             <Link to="/contact-us">Support</Link> /{' '}
             <a href="/terms">Terms</a> /{' '}
-            <Link to="/faq">FAQs</Link> /{' '}
-            <a href="/blog">Blog</a>
+            <Link to="/faq">FAQs</Link>
           </div>
         </div>
       </div>
@@ -23,29 +22,14 @@ const Header = () => {
       <div className="hx-header text-center">
         <div className="container">
           <div className="w-100 d-flex justify-content-between align-items-center header">
-            <div className="d-flex ctop callus wow fadeInLeft" data-wow-delay="0.1s">
-              <i className="bi bi-telephone"></i>{' '}
-              <span>
-                <strong>Call Now</strong> +91 8796294441
-              </span>
-            </div>
+  
+    <div className="d-flex ctop callus wow fadeInLeft" data-wow-delay="0.1s"><i className="bi bi-telephone"></i> <span><strong>Call Now</strong> +91 9958795117</span></div>
 
-            <div className="mb-0 logobox wow fadeInDown" data-wow-delay="0.1s">
-              <a className="brandlogo" href="/">
-                <img src="/assets/img/logo.png" className="navbar-brand p-0" alt="Logo" />
-              </a>
-            </div>
+    <div className="mb-0 logobox wow fadeInDown" data-wow-delay="0.1s"><a className="brandlogo" href="/"><img src="/assets/img/logo.png" className="navbar-brand p-0" alt="Logo" /></a></div>
 
-            <div className="d-flex ctop emailus wow fadeInRight" data-wow-delay="0.1s">
-              <i className="bi bi-envelope"></i>{' '}
-              <span>
-                <strong>Email Now</strong>
-                <a className="email-link" href="mailto:customersupport@digivera.co.in">
-                  customersupport@digivera.co.in
-                </a>
-              </span>
-            </div>
-          </div>
+   <div className="d-flex ctop emailus wow fadeInRight" data-wow-delay="0.1s"><span><strong>Email Now</strong>customersupport@digivera.co.in</span> <i className="bi bi-envelope"></i></div>
+
+</div>
 
           {/* NAVBAR */}
           <div className="w-100 d-flex justify-content-between align-items-center navigation_sec">

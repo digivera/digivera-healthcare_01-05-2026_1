@@ -1,4 +1,6 @@
-﻿const Footer = () => {
+﻿import { Link } from 'react-router-dom';
+
+const Footer = () => {
   return (
     <footer className="ft-main-wrap">
 
@@ -13,11 +15,12 @@
           {/* MENU */}
           <div className="col-md-6 text-center my-3 my-md-0">
             <ul className="ft-menu">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="about-us.html">About us</a></li>
-              <li><a href="services.html">Services</a></li>
-              <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact-us.html">Contact us</a></li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/about-us">About Us</Link></li>
+              <li><Link to="/services">Services</Link></li>
+              <li><Link to="/industries">Industries</Link></li>
+              <li><Link to="/faq">FAQs</Link></li>
+              <li><Link to="/contact-us">Contact Us</Link></li>
             </ul>
           </div>
 
