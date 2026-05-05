@@ -11,7 +11,6 @@ type ContactFormData = {
 const CONTACT_API_URL =
   ((import.meta.env.VITE_CONTACT_API_URL as string | undefined)?.trim() ||
     '/api');
-
 const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
