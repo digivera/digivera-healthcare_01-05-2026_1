@@ -1,34 +1,174 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Digivera Healthcare</title>
-    <meta content="" name="keywords" />
-    <meta content="" name="description" />
+        <meta charset="utf-8">
+        <title>Digivera Healthcare - Home</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Icon Font Stylesheet -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+		<!-- swiper -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+        <!-- Libraries Stylesheet -->
+        <link href="/assets/lib/animate/animate.min.css" rel="stylesheet">
+        <link href="/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Template Stylesheet -->
+        <link rel="stylesheet" href="/assets/css/style.css">
+	    <link href="/assets/css/style-media.css" rel="stylesheet"> 
+    </head>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/lib/animate/animate.min.css" />
-    <link rel="stylesheet" href="/lib/owlcarousel/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/style-media.css" />
-  </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/lib/wow/wow.min.js"></script>
-    <script src="/lib/easing/easing.min.js"></script>
-    <script src="/lib/waypoints/waypoints.min.js"></script>
-    <script src="/lib/counterup/counterup.min.js"></script>
-    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="/js/main.js"></script>
-    <script type="module" src="/src/main.jsx"></script>
+    <script src="/assets/lib/wow/wow.min.js"></script>
+    <script src="/assets/lib/easing/easing.min.js"></script>
+    <script src="/assets/lib/waypoints/waypoints.min.js"></script>
+    <script src="/assets/lib/counterup/counterup.min.js"></script>
+    <script src="/assets/lib/owlcarousel/owl.carousel.min.js"></script>
+    
+
+    <!-- Template Javascript -->
+    <script src="/assets/js/main.js"></script>
+	
+ 
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+// STICKY NAVBAR
+window.addEventListener('scroll', function() {
+  let nav = document.getElementById('hx-header');
+  nav.classList.toggle('hx-sticky', window.scrollY > 100);
+});
+</script>
+
+<script>
+let aboutStarted = false;
+let factsStarted = false;
+
+// ABOUT COUNTER (10+)
+function startAboutCounter() {
+  let counter = document.getElementById("expCount");
+  let count = 0;
+  let target = 10;
+
+  let interval = setInterval(() => {
+    count++;
+    counter.innerText = count;
+
+    if (count >= target) clearInterval(interval);
+  }, 100);
+}
+
+// FACTS COUNTERS (500+, 120+, etc.)
+function runFactsCounter() {
+  let counters = document.querySelectorAll(".counter");
+
+  counters.forEach(counter => {
+    let target = +counter.getAttribute("data-target");
+    let count = 0;
+    let step = target / 50;
+
+    let interval = setInterval(() => {
+      count += step;
+      counter.innerText = Math.floor(count);
+
+      if (count >= target) {
+        counter.innerText = target;
+        clearInterval(interval);
+      }
+    }, 30);
+  });
+}
+
+// SINGLE SCROLL EVENT
+window.addEventListener("scroll", function () {
+
+  // ABOUT SECTION
+  let aboutBox = document.querySelector(".ab-exp-box");
+  if (aboutBox && !aboutStarted) {
+    let pos = aboutBox.getBoundingClientRect().top;
+    if (pos < window.innerHeight) {
+      startAboutCounter();
+      aboutStarted = true;
+    }
+  }
+
+  // FACTS SECTION
+  let factsSection = document.querySelector(".fx-section");
+  if (factsSection && !factsStarted) {
+    let pos = factsSection.getBoundingClientRect().top;
+    if (pos < window.innerHeight) {
+      runFactsCounter();
+      factsStarted = true;
+    }
+  }
+
+});
+</script>
+
+<script>
+const track = document.querySelector(".cl-track");
+const prevBtn = document.querySelector(".cl-prev");
+const nextBtn = document.querySelector(".cl-next");
+
+let position = 0;
+const itemWidth = 2226; // width + gap
+
+// NEXT
+nextBtn.addEventListener("click", () => {
+  position -= itemWidth;
+  track.style.transform = `translateX(${position}px)`;
+});
+
+// PREV
+prevBtn.addEventListener("click", () => {
+  position += itemWidth;
+  track.style.transform = `translateX(${position}px)`;
+});
+
+// AUTO SCROLL (ticker)
+setInterval(() => {
+  position -= 1;
+  track.style.transform = `translateX(${position}px)`;
+
+  // RESET LOOP
+  if (Math.abs(position) >= track.scrollWidth / 2) {
+    position = 0;
+  }
+}, 20);
+</script>
+<script>
+var swiper = new Swiper(".mySwiper", {
+  slidesPerView: 3,
+  spaceBetween: 25,
+  loop: true,
+  autoplay: {
+    delay: 2500,
+    disableOnInteraction: false,
+  },
+  speed: 800,
+
+  breakpoints: {
+    0: {
+      slidesPerView: 1
+    },
+    768: {
+      slidesPerView: 2
+    },
+    992: {
+      slidesPerView: 3
+    }
+  }
+});
+</script>
   </body>
 </html>
- 
