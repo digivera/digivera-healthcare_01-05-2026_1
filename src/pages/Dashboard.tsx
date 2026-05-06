@@ -5,7 +5,6 @@ import WhyChooseUs from '../components/WhyChooseUs';
 import About from '../components/About';
 import Facts from '../components/Facts';
 import Services from '../components/Services';
-import Clients from '../components/Clients';
 import Industries from '../components/Industries';
 import Contact from '../components/Contact';
 import Testimonials from '../components/Testimonials';
@@ -21,7 +20,7 @@ const Dashboard = () => {
       <About />
       <Facts />
       <Services />
-      <Clients />
+      
       <Industries />
       <Contact />
       <Testimonials />

@@ -1,4 +1,6 @@
-﻿const Facts = () => {
+﻿import CountUpNumber from './CountUpNumber';
+
+const Facts = () => {
   return (
     <section className="fx-section pb-5">
       <div className="container">
@@ -19,7 +21,7 @@
                 <div className="fx-icon">
                   <img src="/assets/img/img_10.png" className="why_ico" alt="img" />
                 </div>
-                <h3><span className="counter" data-target="50">0</span>+</h3>
+                <h3><CountUpNumber target={50} className="counter" />+</h3>
               </div>
               <p>Medical Professionals</p>
             </div>
@@ -32,7 +34,7 @@
                 <div className="fx-icon">
                   <img src="/assets/img/img_11.png" className="why_ico" alt="img" />
                 </div>
-                <h3><span className="counter" data-target="120">0</span>+</h3>
+                <h3><CountUpNumber target={120} className="counter" />+</h3>
               </div>
               <p>Partner Hospitals</p>
             </div>
@@ -45,7 +47,7 @@
                 <div className="fx-icon">
                   <img src="/assets/img/img_12.png" className="why_ico" alt="img" />
                 </div>
-                <h3><span className="counter" data-target="15">0</span>+</h3>
+                <h3><CountUpNumber target={15} className="counter" />+</h3>
               </div>
               <p>Cities Covered</p>
             </div>
