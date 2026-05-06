@@ -29,9 +29,7 @@ const HeroCarousel = () => {
                   DigiVera Healthcare Services provides qualified nurses, medical support staff,
                   and equipment to hospitals and healthcare institutions across India.
                 </p>
-                <p>
-                  <a href="tel:+919958795117" className="hx-btn">Request Staff</a>
-                </p>
+                
               </div>
             </div>
           </div>

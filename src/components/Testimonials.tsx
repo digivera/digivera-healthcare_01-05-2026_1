@@ -1,4 +1,50 @@
-﻿const Testimonials = () => {
+﻿import { useEffect, useRef } from 'react';
+
+declare global {
+  interface Window {
+    Swiper?: new (container: Element, options: Record<string, unknown>) => {
+      destroy: (deleteInstance?: boolean, cleanStyles?: boolean) => void;
+    };
+  }
+}
+
+const Testimonials = () => {
+  const swiperContainerRef = useRef<HTMLDivElement | null>(null);
+  const swiperRef = useRef<{ destroy: (deleteInstance?: boolean, cleanStyles?: boolean) => void } | null>(null);
+
+  useEffect(() => {
+    if (!window.Swiper || !swiperContainerRef.current) {
+      return;
+    }
+
+    swiperRef.current = new window.Swiper(swiperContainerRef.current, {
+      slidesPerView: 3,
+      spaceBetween: 25,
+      loop: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      speed: 800,
+      breakpoints: {
+        0: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        992: {
+          slidesPerView: 3,
+        },
+      },
+    });
+
+    return () => {
+      swiperRef.current?.destroy(true, true);
+      swiperRef.current = null;
+    };
+  }, []);
+
   return (
     <section className="ts-section">
       <div className="container">
@@ -15,24 +61,24 @@
                 genuine satisfaction, meaningful results, and lasting relationships built
                 over time.
               </p>
-              <a href="tel:+919958795117" className="ts-btn">Know More â†’</a>
+            
             </div>
           </div>
 
           {/* RIGHT SLIDER */}
           <div className="col-lg-8">
-            <div className="swiper mySwiper wow fadeInUp" data-wow-delay="0.1s">
+            <div className="swiper wow fadeInUp" data-wow-delay="0.1s" ref={swiperContainerRef}>
               <div className="swiper-wrapper">
 
                 {/* CARD 1 */}
-                <div className="swiper-slide">
+               <div className="swiper-slide">
                   <div className="ts-card">
-                    <img src="/assets/img/test1.jpg" className="ts-img" alt="Micheal" />
+                    <img src="/assets/img/test1.jpg" className="ts-img" alt="Rahul" />
                     <div className="quote">"</div>
                     <div className="ts-content">
-                      <p>Fill out the form below to schedule an appointment or inquire about our services.</p>
-                      <h6>Micheal</h6>
-                      <p><span>MDS manufacturing</span></p>
+                      <p>Excellent service and professional team.</p>
+                      <h6>Rahul</h6>
+                      <p><span>Hospital Admin</span></p>
                     </div>
                   </div>
                 </div>
@@ -40,11 +86,11 @@
                 {/* CARD 2 */}
                 <div className="swiper-slide">
                   <div className="ts-card">
-                    <img src="/assets/img/test2.jpg" className="ts-img" alt="Diane" />
+                    <img src="/assets/img/test2.jpg" className="ts-img" alt="Pooja" />
                     <div className="quote">"</div>
                     <div className="ts-content">
                       <p>Fill out the form below to schedule an appointment or inquire about our services.</p>
-                      <h6>Diane</h6>
+                      <h6>Pooja</h6>
                       <p><span>Experienced Customer</span></p>
                     </div>
                   </div>
@@ -66,11 +112,11 @@
                 {/* CARD 4 */}
                 <div className="swiper-slide">
                   <div className="ts-card">
-                    <img src="/assets/img/test1.jpg" className="ts-img" alt="Rahul" />
+                    <img src="/assets/img/rohan.png" className="ts-img" width={700} alt="Rahul" />
                     <div className="quote">"</div>
                     <div className="ts-content">
                       <p>Excellent service and professional team.</p>
-                      <h6>Rahul</h6>
+                      <h6>Rohan</h6>
                       <p><span>Hospital Admin</span></p>
                     </div>
                   </div>

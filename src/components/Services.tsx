@@ -30,7 +30,7 @@ const Services = ({ showTitle = true }: ServicesProps) => {
                 <div className="sv-text">
                   <h5>Nursing Staff</h5>
                   <p>Qualified nurses for all departments - general wards, OPD, and speciality care.</p>
-                  <a href="tel:+919958795117" className="sv-btn">Know More â†’</a>
+                
                 </div>
               </div>
               <img src="/assets/img/c_1.jpg" className="img-fluid" alt="nursing staff" />
@@ -47,7 +47,7 @@ const Services = ({ showTitle = true }: ServicesProps) => {
                 <div className="sv-text">
                   <h5>ICU &amp; Emergency</h5>
                   <p>Trained critical care staff for ICU, CCU, NICU, and emergency departments.</p>
-                  <a href="tel:+919958795117" className="sv-btn">Know More â†’</a>
+                 
                 </div>
               </div>
               <img src="/assets/img/c_2.jpg" className="img-fluid" alt="ICU emergency" />
@@ -64,7 +64,7 @@ const Services = ({ showTitle = true }: ServicesProps) => {
                 <div className="sv-text">
                   <h5>Medical Coordinators</h5>
                   <p>Patient care coordinators and medical operations support staff.</p>
-                  <a href="tel:+919958795117" className="sv-btn">Know More â†’</a>
+                 
                 </div>
               </div>
               <img src="/assets/img/c_3.jpg" className="img-fluid" alt="medical coordinators" />
@@ -81,7 +81,7 @@ const Services = ({ showTitle = true }: ServicesProps) => {
                 <div className="sv-text">
                   <h5>Medical Equipment</h5>
                   <p>Supply of essential medical equipment and consumables to hospitals.</p>
-                  <a href="tel:+919958795117" className="sv-btn">Know More â†’</a>
+                 
                 </div>
               </div>
               <img src="/assets/img/c_4.jpg" className="img-fluid" alt="medical equipment" />
@@ -98,7 +98,7 @@ const Services = ({ showTitle = true }: ServicesProps) => {
                 <div className="sv-text">
                   <h5>Ward Boys &amp; Attendants</h5>
                   <p>Reliable ward boys, patient attendants, and hospital support staff.</p>
-                  <a href="tel:+919958795117" className="sv-btn">Know More â†’</a>
+                 
                 </div>
               </div>
               <img src="/assets/img/c_5.jpg" className="img-fluid" alt="ward boys attendants" />
@@ -115,7 +115,7 @@ const Services = ({ showTitle = true }: ServicesProps) => {
                 <div className="sv-text">
                   <h5>Manpower Outsourcing</h5>
                   <p>End-to-end hospital manpower outsourcing and managed staffing solutions.</p>
-                  <a href="tel:+919958795117" className="sv-btn">Know More â†’</a>
+                 
                 </div>
               </div>
               <img src="/assets/img/c_6.jpg" className="img-fluid" alt="manpower outsourcing" />

@@ -19,7 +19,7 @@
                 <div className="fx-icon">
                   <img src="/assets/img/img_10.png" className="why_ico" alt="img" />
                 </div>
-                <h3><span className="counter" data-target="500">0</span>+</h3>
+                <h3><span className="counter" data-target="50">0</span>+</h3>
               </div>
               <p>Medical Professionals</p>
             </div>

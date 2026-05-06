@@ -66,7 +66,7 @@
                 <img src="/assets/img/img_4.png" className="why_ico" alt="img" />
               </div>
               <h5>Quick Deployment</h5>
-              <p>Rapid deployment of trained staff within 24â€“48 hours.</p>
+              <p>Rapid deployment of trained staff within 24 to 48 hours.</p>
             </div>
           </div>
 

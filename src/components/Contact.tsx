@@ -1,101 +1,4 @@
-﻿import { useState } from 'react';
-
-type ContactFormData = {
-  name: string;
-  company: string;
-  email: string;
-  phone: string;
-  message: string;
-};
-
-const CONTACT_API_URL =
-  ((import.meta.env.VITE_CONTACT_API_URL as string | undefined)?.trim() ||
-    '/api');
-const Contact = () => {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
-  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
-  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const validateForm = (data: ContactFormData) => {
-    const nextErrors: Partial<Record<keyof ContactFormData, string>> = {};
-
-    if (!data.name.trim() || data.name.trim().length < 2) {
-      nextErrors.name = 'Please enter your full name.';
-    }
-    if (!/^\S+@\S+\.\S+$/.test(data.email.trim())) {
-      nextErrors.email = 'Please enter a valid email address.';
-    }
-    if (!/^[0-9+()\-\s]{10,15}$/.test(data.phone.trim())) {
-      nextErrors.phone = 'Please enter a valid mobile number.';
-    }
-    if (!data.message.trim() || data.message.trim().length < 10) {
-      nextErrors.message = 'Message must be at least 10 characters.';
-    }
-
-    return nextErrors;
-  };
-
-  const handleChange = (field: keyof ContactFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmitMessage(null);
-
-    const validationErrors = validateForm(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const response = await fetch(CONTACT_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Name: formData.name.trim(),
-          Company: formData.company.trim(),
-          Email: formData.email.trim(),
-          Phone: formData.phone.trim(),
-          Message: formData.message.trim(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Request failed');
-      }
-
-      setSubmitMessage({ type: 'success', text: 'Thanks! Your message has been sent successfully.' });
-      setFormData({
-        name: '',
-        company: '',
-        email: '',
-        phone: '',
-        message: '',
-      });
-      setErrors({});
-    } catch {
-      setSubmitMessage({
-        type: 'error',
-        text: 'Unable to submit right now. Please check API URL/CORS settings and try again.',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+﻿const Contact = () => {
   return (
     <section className="ct-section py-5">
       <div className="container">
@@ -116,23 +19,45 @@ const Contact = () => {
         <div className="row align-items-start">
 
           {/* LEFT SIDE */}
-          <div className="col-lg-12 mb-4">
-            <div className="w-100 wow fadeInLeft text-center" data-wow-delay="0.1s">
-              <h3 className="ct-heading">
+          <div className="col-lg-5 mb-4">
+            <div className="w-100 wow fadeInLeft" data-wow-delay="0.1s">
+              <h4 className="ct-heading">
                 Have any query?<br />Feel Free to Contact Us
-              </h3>
+              </h4>
              
               <div className="ct-info">
                 <p className="call_ct">
-                  <i className="bi bi-telephone"></i> <strong>+91 9958795117</strong>
+                  <i className="bi bi-telephone"></i> <strong>+91 87962 94441</strong>
+                  
                 </p>
+                 <hr />
+                 <p className="call_ct">
+                  <i className="bi bi-telephone"></i> <strong>+91 87962 94442</strong>
+               
+                </p>
+                 <hr />
+                 <p className="call_ct">
+                  <i className="bi bi-telephone"></i> <strong>+91 87962 94443</strong>
+                 
+
+                </p>
+                 <hr />
                 <p><i className="bi bi-envelope"></i> customersupport@digivera.co.in</p>
+                  <hr />
                
                 <p><i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India</p>
               </div>
             </div>
           </div>
-
+          <div className="col-lg-7">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3500.869429370953!2d77.3648963!3d28.663628!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfbe7f2a1e783%3A0x1824eadd2cf48d44!2sDigiVera%20Technologies!5e0!3m2!1sen!2sin!4v1778048257946!5m2!1sen!2sin"
+              style={{ border: 0,height: '400px', width: '100%' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
           {/* RIGHT FORM — hidden
           <div className="col-lg-7">
             <form className="ct-form wow fadeInRight" data-wow-delay="0.1s" onSubmit={handleSubmit} noValidate>

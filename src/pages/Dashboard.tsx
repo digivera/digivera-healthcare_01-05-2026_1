@@ -7,6 +7,7 @@ import Facts from '../components/Facts';
 import Services from '../components/Services';
 import Clients from '../components/Clients';
 import Industries from '../components/Industries';
+import Contact from '../components/Contact';
 import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
 
@@ -22,7 +23,7 @@ const Dashboard = () => {
       <Services />
       <Clients />
       <Industries />
-      
+      <Contact />
       <Testimonials />
       <Footer />
       

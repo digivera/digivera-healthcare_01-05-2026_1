@@ -54,6 +54,52 @@
 
         </div>
 
+        {/* FOUNDERS */}
+        <div className="row mt-5 g-4 justify-content-center">
+          <div className="col-12 text-center mb-2 wow fadeInDown" data-wow-delay="0.1s">
+            <h3 className="main-title">Our Founders</h3>
+          </div>
+
+          {/* Founder 1 */}
+          <div className="col-md-4 wow fadeInLeft" data-wow-delay="0.1s">
+            <div className="ab-card mt-0 flex-column text-center align-items-center">
+              <div className="ab-icon mb-3">
+                <img src="/assets/img/img_7.png" className="why_ico" alt="founder" />
+              </div>
+              <div className="abt-text">
+                <h5>Gourav Sharma</h5>
+                <p className="mb-1"><strong>Co-founder &amp; MD</strong></p>
+              </div>
+            </div>
+          </div>
+
+          {/* Founder 2 */}
+          <div className="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
+            <div className="ab-card mt-0 flex-column text-center align-items-center">
+              <div className="ab-icon mb-3">
+                <img src="/assets/img/img_7.png" className="why_ico" alt="founder" />
+              </div>
+              <div className="abt-text">
+                <h5>Shailender Chauhan</h5>
+                <p className="mb-1"><strong>Co-founder &amp; MD</strong></p>
+              </div>
+            </div>
+          </div>
+
+          {/* Founder 3 */}
+          <div className="col-md-4 wow fadeInRight" data-wow-delay="0.3s">
+            <div className="ab-card mt-0 flex-column text-center align-items-center">
+              <div className="ab-icon mb-3">
+                <img src="/assets/img/img_7.png" className="why_ico" alt="founder" />
+              </div>
+              <div className="abt-text">
+                <h5>Ritesh Sharma</h5>
+                <p className="mb-1"><strong>Co-founder &amp; MD</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* BOTTOM CARDS */}
         <div className="row mt-4 g-4">
 
