@@ -1445,3 +1445,89 @@ button.navbar-toggler {
     height: auto;
 }
 }
+
+.founder-section .ts-box {
+  background: #fff;
+  border-radius: 15px;
+  padding: 60px 20px 30px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* IMAGE */
+.founder-section .ts-img-wrap {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.founder-section .ts-img-wrap img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+}
+
+/* CONTENT */
+.founder-section .ts-content {
+  padding: 10px;
+}
+
+.founder-section .ts-content p {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* NAME */
+.founder-section .ts-content h5 {
+  margin-top: 10px;
+  color: #fff;
+}
+
+.founder-section .ts-content span {
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* BUTTON */
+.founder-section .read-btn {
+  background: none;
+  border: none;
+  color: #ff9800;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 10px 0;
+}
+.founder-section .ts-btn {
+    border: 1px solid #fff;
+    padding: 8px 25px;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    margin: 18px 0 0;
+    background: transparent;
+}
+ 
+
+/* THEMES */
+.founder-section .ts-box.dark, .founder-section .ts-box.orange {
+    background: #1c398e;
+    min-height: 450px;
+}
+ 
+
+/* TEXT COLOR FIX */
+.founder-section .ts-box.orange .ts-content p,
+.founder-section .ts-box.orange h5,
+.founder-section .ts-box.orange span {
+  color: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .founder-section .ts-box {
+    margin-top: 50px;
+  }
+}

@@ -1,5 +1,17 @@
-﻿const About = () => {
+﻿import { useState } from 'react';
+
+const About = () => {
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+
+  const toggleCard = (cardId: string) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [cardId]: !prev[cardId],
+    }));
+  };
+
   return (
+    <>
     <section className="ab-section content-sec py-5">
       <div className="container">
 
@@ -54,51 +66,8 @@
 
         </div>
 
-        {/* FOUNDERS */}
-        <div className="row mt-5 g-4 justify-content-center">
-          <div className="col-12 text-center mb-2 wow fadeInDown" data-wow-delay="0.1s">
-            <h3 className="main-title">Our Founders</h3>
-          </div>
-
-          {/* Founder 1 */}
-          <div className="col-md-4 wow fadeInLeft" data-wow-delay="0.1s">
-            <div className="ab-card mt-0 flex-column text-center align-items-center">
-              <div className="ab-icon mb-3">
-                <img src="/assets/img/img_7.png" className="why_ico" alt="founder" />
-              </div>
-              <div className="abt-text">
-                <h5>Gourav Sharma</h5>
-                <p className="mb-1"><strong>Co-founder &amp; MD</strong></p>
-              </div>
-            </div>
-          </div>
-
-          {/* Founder 2 */}
-          <div className="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
-            <div className="ab-card mt-0 flex-column text-center align-items-center">
-              <div className="ab-icon mb-3">
-                <img src="/assets/img/img_7.png" className="why_ico" alt="founder" />
-              </div>
-              <div className="abt-text">
-                <h5>Shailender Chauhan</h5>
-                <p className="mb-1"><strong>Co-founder &amp; MD</strong></p>
-              </div>
-            </div>
-          </div>
-
-          {/* Founder 3 */}
-          <div className="col-md-4 wow fadeInRight" data-wow-delay="0.3s">
-            <div className="ab-card mt-0 flex-column text-center align-items-center">
-              <div className="ab-icon mb-3">
-                <img src="/assets/img/img_7.png" className="why_ico" alt="founder" />
-              </div>
-              <div className="abt-text">
-                <h5>Ritesh Sharma</h5>
-                <p className="mb-1"><strong>Co-founder &amp; MD</strong></p>
-              </div>
-            </div>
-          </div>
-        </div>
+       
+       
 
         {/* BOTTOM CARDS */}
         <div className="row mt-4 g-4">
@@ -140,6 +109,95 @@
 
       </div>
     </section>
+    <section className="founder-section py-5">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <div className="w-100 title_sec wow fadeInDown text-center" data-wow-delay="0.1s">
+              <h2 className="main-title">Visionaries Behind Our Success</h2>
+              <p className="subtitle">The visionaries who laid the foundation and continue to drive our growth and innovation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="row g-4 mt-5">
+
+          {/* CARD 1 */}
+          <div className="col-md-4">
+            <div className="ts-box dark">
+              <div className="ts-img-wrap">
+                <img src="/assets/img/2.jpg" alt="Ritesh Sharma" />
+              </div>
+
+              <div className="ts-content">
+                <h5>Ritesh Sharma</h5>
+                <p className="short-text">
+                  Ritesh Sharma is a seasoned professional with over 15 years of experience spanning the pharmaceutical, healthcare, and corporate training sectors. She holds a Master of Science in Biochemistry from H.N.B. Garhwal University, Srinagar, where she graduated with distinction, complemented by a Bachelor of Science from Himachal Pradesh University. Her academic foundation in biochemistry has been the cornerstone of a career dedicated to advancing health sciences and human wellness.
+                </p>
+
+                <p className={`full-text ${expandedCards.ritesh ? '' : 'd-none'}`}>
+                  Ritesh has demonstrated deep expertise in quality control, laboratory analysis, and pharmaceutical research, having worked with leading industry organizations across India. Her tenure as a Quality Control Chemist at Health Biotech Ltd equipped her with hands-on proficiency in advanced laboratory instrumentation and standardization protocols. As a Product Trainer at Tianjin Tianshi India Pvt. Ltd., she honed strong communication and presentation skills, successfully educating distributors and clients across diverse markets. Ritesh brings a distinctive blend of scientific rigor and leadership, with a keen eye for detail and commendable analytical and critical thinking abilities. She is experienced in clinical research, nutritional sciences, and herbal supplement domains, giving her a holistic view of health and wellness. Throughout her career, she has consistently demonstrated the ability to bridge technical expertise with practical training and stakeholder engagement. Driven by a commitment to improving quality of life through science and innovation, Ritesh continues to bring strategic vision and professional excellence to every endeavor.
+                </p>
+
+                <button className="ts-btn read-btn" type="button" onClick={() => toggleCard('ritesh')}>
+                  {expandedCards.ritesh ? 'Read Less' : 'Read More'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* CARD 2 */}
+          <div className="col-md-4">
+            <div className="ts-box orange">
+              <div className="ts-img-wrap">
+                <img src="/assets/img/1.jpg" alt="Gourav Sharma" />
+              </div>
+
+              <div className="ts-content">
+                <h5>Gourav sharma</h5>
+                <p className="short-text">
+                  With 23+ years of experience delivering large-scale technology programs across global enterprises, I specialize in leading high-performing teams, driving cloud transformations, and managing complex multi-vendor ecosystems. I focus on enhancing operational resilience and ensuring compliance through automation-led strategies. My extensive work with global healthcare clients provided deep insights into industry challenges, which led to the co-founding of DigiVera Healthcare Services LLP.
+                </p>
+
+                <p className={`full-text ${expandedCards.gourav ? '' : 'd-none'}`}>
+                  In collaboration with two fellow IT professionals, we established the organization to bridge workforce gaps by providing skilled nurses, GDAs, and medical support solutions. I bring together strong technology leadership and healthcare domain expertise to deliver scalable, high-impact outcomes.
+                </p>
+
+                <button className="ts-btn read-btn" type="button" onClick={() => toggleCard('gourav')}>
+                  {expandedCards.gourav ? 'Read Less' : 'Read More'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* CARD 3 */}
+          <div className="col-md-4">
+            <div className="ts-box orange">
+              <div className="ts-img-wrap">
+                <img src="/assets/img/3.jpg" alt="Shailender Chauhan" />
+              </div>
+
+              <div className="ts-content">
+                <h5>Shailender</h5>
+                <p className="short-text">
+                  Driving Digital Health through Technology, Shailender Chauhan is the Managing Director &amp; Co-Founder of DigiVera Healthcare LLP, bringing over 20 years of enterprise technology leadership across BFSI, Healthcare, Fintech, and IT Services. A seasoned strategist with deep expertise in Digital transformation Programs, PMO Governance, SaaS &amp; Cloud Transformation (AWS, Azure), Data Engineering,and Gen AI Analytics, he has successfully delivered large-scale digital programmes for global organisations 
+                </p>
+
+                <p className={`full-text ${expandedCards.shailender ? '' : 'd-none'}`}>
+                  and the Ministry of Urban Government of India. His leadership at DigiVera is anchored in making quality healthcare accessible through smart, scalable technology, integrating AI-driven insights, modern data platforms, and agile delivery to transform how healthcare organisations operate and serve patients across India.
+                </p>
+
+                <button className="ts-btn read-btn" type="button" onClick={() => toggleCard('shailender')}>
+                  {expandedCards.shailender ? 'Read Less' : 'Read More'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    </>
   );
 };
 
