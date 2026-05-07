@@ -150,7 +150,7 @@ const About = () => {
           <div className="col-md-4">
             <div className="ts-box orange">
               <div className="ts-img-wrap">
-                <img src="/assets/img/1.jpg" alt="Gourav Sharma" />
+                <img src="/assets/img/3.jpg" alt="Gourav Sharma" />
               </div>
 
               <div className="ts-content">
@@ -174,7 +174,7 @@ const About = () => {
           <div className="col-md-4">
             <div className="ts-box orange">
               <div className="ts-img-wrap">
-                <img src="/assets/img/3.jpg" alt="Shailender Chauhan" />
+                <img src="/assets/img/1.jpg" alt="Shailender Chauhan" />
               </div>
 
               <div className="ts-content">
