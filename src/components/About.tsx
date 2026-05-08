@@ -156,11 +156,11 @@ const About = () => {
               <div className="ts-content">
                 <h5>Gourav sharma</h5>
                 <p className="short-text">
-                  With 23+ years of experience delivering large-scale technology programs across global enterprises, I specialize in leading high-performing teams, driving cloud transformations, and managing complex multi-vendor ecosystems. I focus on enhancing operational resilience and ensuring compliance through automation-led strategies. My extensive work with global healthcare clients provided deep insights into industry challenges, which led to the co-founding of DigiVera Healthcare Services LLP.
+                 Gourav Sharma is the Co-Founder and Managing Director of DigiVera Group and DigiVera Healthcare Services LLP, established in March 2026. With 23+ years of experience in the IT industry, he has led large-scale global technology programs specializing in cloud transformation, operational resilience, automation, and compliance management.Having worked closely with global healthcare clients, Gourav gained valuable insights into healthcare industry challenges and workforce gaps. 
                 </p>
 
                 <p className={`full-text ${expandedCards.gourav ? '' : 'd-none'}`}>
-                  In collaboration with two fellow IT professionals, we established the organization to bridge workforce gaps by providing skilled nurses, GDAs, and medical support solutions. I bring together strong technology leadership and healthcare domain expertise to deliver scalable, high-impact outcomes.
+                  What began as a discussion to start an IT business evolved into the establishment of DigiVera Healthcare Services LLP with two fellow IT professionals. The name “DigiVera” represents “Digital Trust”. The organization focuses on bridging healthcare workforce gaps by providing skilled nurses, GDAs, physiotherapists, medical support professionals, and critical medical equipment support services. Gourav combines strong technology leadership with healthcare industry understanding and collaboration with domain experts to deliver scalable, reliable, and high-impact healthcare solutions.
                 </p>
 
                 <button className="ts-btn read-btn" type="button" onClick={() => toggleCard('gourav')}>
