@@ -27,7 +27,7 @@ const Header = () => {
 
     <div className="mb-0 logobox wow fadeInDown" data-wow-delay="0.1s"><a className="brandlogo" href="/"><img src="/assets/img/logo.png" className="navbar-brand p-0" alt="Logo" /></a></div>
 
-   <div className="d-flex ctop emailus wow fadeInRight" data-wow-delay="0.1s"><span><strong>Email Now</strong>customersupport@digivera.co.in</span> <i className="bi bi-envelope"></i></div>
+   <div className="d-flex ctop emailus wow fadeInRight" data-wow-delay="0.1s"><span><strong>Email Now</strong>Healthcareservices@digivera.co.in</span> <i className="bi bi-envelope"></i></div>
 
 </div>
 

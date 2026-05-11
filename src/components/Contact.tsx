@@ -42,7 +42,7 @@
 
                 </p>
                  <hr />
-                <p><i className="bi bi-envelope"></i> customersupport@digivera.co.in</p>
+                <p><i className="bi bi-envelope"></i> Healthcareservices@digivera.co.in</p>
                   <hr />
                
                 <p><i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India</p>
