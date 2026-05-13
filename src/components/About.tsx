@@ -196,11 +196,11 @@ const About = () => {
            <div className="col-md-3">
             <div className="ts-box orange">
               <div className="ts-img-wrap">
-                <img src="/assets/img/renuka.png" alt="Renuka Garg" />
+                <img src="/assets/img/renuka.png" alt="Dr Renuka Garg" />
               </div>
 
               <div className="ts-content">
-                <h5>Renuka Garg</h5>
+                <h5>Dr Renuka Garg</h5>
                 <p className="short-text">
                   A results-driven and self-motivated healthcare professional with a focus on operational excellence and strategic growth. Equipped with a strong educational foundation in Medical Sciences and extensive leadership experience, Dr. Garg brings exceptional interpersonal, communication, and team management skills to every challenge.With a proven track record in healthcare operations, she is committed to driving total organizational efficiency, fostering institutional growth 
                 </p>
