@@ -121,7 +121,28 @@ const About = () => {
         </div>
 
         <div className="row g-4 mt-5">
+ <div className="col-md-3">
+            <div className="ts-box orange">
+              <div className="ts-img-wrap">
+                <img src="/assets/img/renuka.png" alt="Dr. Renuka Garg" />
+              </div>
 
+              <div className="ts-content">
+                <h5>Dr. Renuka Garg</h5>
+                <p className="short-text">
+                  A results-driven and self-motivated healthcare professional with a focus on operational excellence and strategic growth. Equipped with a strong educational foundation in Medical Sciences and extensive leadership experience, Dr. Garg brings exceptional interpersonal, communication, and team management skills to every challenge.With a proven track record in healthcare operations, she is committed to driving total organizational efficiency, fostering institutional growth 
+                </p>
+
+                <p className={`full-text ${expandedCards.renuka ? '' : 'd-none'}`}>
+                , and opening new avenues for excellence in the medical field.As an enterprising leader, Dr. Garg combines grit, determination, and a sharp ability to learn and adapt swiftly in dynamic environments.Beyond her operational responsibilities, Dr. Garg plays an active and pivotal role in talent acquisition, spearheading the recruitment and onboarding of qualified Nurses and General Duty Assistants (GDAs). Her hands-on involvement in building a competent and compassionate care team reflects her deep understanding of ground-level healthcare needs and her commitment to maintaining the highest standards of patient care. A dedicated Physiotherapist by training, she serves with full sincerity, integrity, and an unwavering commitment to delivering high-quality patient care and operational outcomes — making her a valuable asset at the helm of any healthcare organization.
+                </p>
+
+                <button className="ts-btn read-btn" type="button" onClick={() => toggleCard('renuka')}>
+                  {expandedCards.renuka ? 'Read Less' : 'Read More'}
+                </button>
+              </div>
+            </div>
+          </div>
           {/* CARD 1 */}
           <div className="col-md-3">
             <div className="ts-box dark">
@@ -193,28 +214,7 @@ const About = () => {
               </div>
             </div>
           </div>
-           <div className="col-md-3">
-            <div className="ts-box orange">
-              <div className="ts-img-wrap">
-                <img src="/assets/img/renuka.png" alt="Dr. Renuka Garg" />
-              </div>
-
-              <div className="ts-content">
-                <h5>Dr. Renuka Garg</h5>
-                <p className="short-text">
-                  A results-driven and self-motivated healthcare professional with a focus on operational excellence and strategic growth. Equipped with a strong educational foundation in Medical Sciences and extensive leadership experience, Dr. Garg brings exceptional interpersonal, communication, and team management skills to every challenge.With a proven track record in healthcare operations, she is committed to driving total organizational efficiency, fostering institutional growth 
-                </p>
-
-                <p className={`full-text ${expandedCards.renuka ? '' : 'd-none'}`}>
-                , and opening new avenues for excellence in the medical field.As an enterprising leader, Dr. Garg combines grit, determination, and a sharp ability to learn and adapt swiftly in dynamic environments.Beyond her operational responsibilities, Dr. Garg plays an active and pivotal role in talent acquisition, spearheading the recruitment and onboarding of qualified Nurses and General Duty Assistants (GDAs). Her hands-on involvement in building a competent and compassionate care team reflects her deep understanding of ground-level healthcare needs and her commitment to maintaining the highest standards of patient care. A dedicated Physiotherapist by training, she serves with full sincerity, integrity, and an unwavering commitment to delivering high-quality patient care and operational outcomes — making her a valuable asset at the helm of any healthcare organization.
-                </p>
-
-                <button className="ts-btn read-btn" type="button" onClick={() => toggleCard('renuka')}>
-                  {expandedCards.renuka ? 'Read Less' : 'Read More'}
-                </button>
-              </div>
-            </div>
-          </div>
+          
 
         </div>
       </div>
