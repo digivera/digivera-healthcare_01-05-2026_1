@@ -9,7 +9,6 @@ const Servic = () => {
     <>
       <Spinner />
       <Header />
-
       {/* INNER PAGE BANNER */}
       <div id="hxCarousel" className="carousel slide">
         <div className="carousel-inner">
