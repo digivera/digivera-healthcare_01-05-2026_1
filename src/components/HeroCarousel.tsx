@@ -1,95 +1,99 @@
-﻿import { useEffect } from 'react';
-
-const HeroCarousel = () => {
-  useEffect(() => {
-    // Bootstrap JS is loaded via index.html script tags; initialize after React mounts
-    if (typeof (window as any).bootstrap !== 'undefined') {
-      const el = document.getElementById('hxCarousel');
-      if (el) {
-        new (window as any).bootstrap.Carousel(el, { interval: 3000, ride: 'carousel' });
-      }
-    }
-  }, []);
-
-  return (
-    <div id="hxCarousel" className="carousel slide">
-      <div className="carousel-inner">
-
-        {/* SLIDE 1 */}
-        <div className="carousel-item active">
-          <div
-            className="hx-carousel-item"
-            style={{ backgroundImage: "url('/assets/img/hero_1.jpg')" }}
-          >
-            <div className="hx-overlay"></div>
-            <div className="container">
-              <div className="hx-caption hx-animate">
-                <h1>Reliable Healthcare Staff, When You Need Them Most</h1>
-                <p>
-                  DigiVera Healthcare Services provides qualified nurses, medical support staff,
-                  and equipment to hospitals and healthcare institutions across India.
-                </p>
-                
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* SLIDE 2 */}
-        <div className="carousel-item">
-          <div
-            className="hx-carousel-item"
-            style={{ backgroundImage: "url('/assets/img/hero_2.jpg')" }}
-          >
-            <div className="hx-overlay"></div>
-            <div className="container">
-              <div className="hx-caption hx-animate">
-                <h1>Professional Medical Support Services</h1>
-                <p>
-                  DigiVera Healthcare Services provides qualified nurses, medical support staff,
-                  and equipment to hospitals and healthcare institutions across India.
-                </p>
-                <p>
-                  <a href="tel:+919958795117" className="hx-btn">Request Staff</a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* SLIDE 3 */}
-        <div className="carousel-item">
-          <div
-            className="hx-carousel-item"
-            style={{ backgroundImage: "url('/assets/img/hero_3.jpg')" }}
-          >
-            <div className="hx-overlay"></div>
-            <div className="container">
-              <div className="hx-caption hx-animate">
-                <h1>Reliable Healthcare Medical Support Services</h1>
-                <p>
-                  DigiVera Healthcare Services provides qualified nurses, medical support staff,
-                  and equipment to hospitals and healthcare institutions across India.
-                </p>
-                <p>
-                  <a href="tel:+919958795117" className="hx-btn">Request Staff</a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* CONTROLS */}
-      <button className="carousel-control-prev" data-bs-target="#hxCarousel" data-bs-slide="prev">
-        <span className="carousel-control-prev-icon"></span>
-      </button>
-      <button className="carousel-control-next" data-bs-target="#hxCarousel" data-bs-slide="next">
-        <span className="carousel-control-next-icon"></span>
-      </button>
-    </div>
-  );
+﻿type Slide = {
+  image: string;
+  alt: string;
+  title: string;
+  text: string;
+  cta?: { label: string; href: string };
 };
+
+const PHONE = 'tel:+919958795117';
+const INTRO =
+  'DigiVera Healthcare Services provides qualified nurses, medical support staff, and equipment to hospitals and healthcare institutions across India.';
+
+const SLIDES: Slide[] = [
+  {
+    image: '/assets/img/hero_1.jpg',
+    alt: 'Nurses attending to a patient in a hospital ward',
+    title: 'Reliable Healthcare Staff, When You Need Them Most',
+    text: INTRO,
+    cta: { label: 'Request Staff', href: PHONE },
+  },
+  {
+    image: '/assets/img/hero_2.jpg',
+    alt: 'Medical support team working together',
+    title: 'Professional Medical Support Services',
+    text: INTRO,
+    cta: { label: 'Request Staff', href: PHONE },
+  },
+  {
+    image: '/assets/img/hero_3.jpg',
+    alt: 'Healthcare professional using medical equipment',
+    title: 'Reliable Healthcare Medical Support Services',
+    text: INTRO,
+    cta: { label: 'Request Staff', href: PHONE },
+  },
+];
+
+const HeroCarousel = () => (
+  // Bootstrap's data API handles init, so no useEffect is needed.
+  <section id="hxCarousel" className="carousel slide carousel-fade hx-carousel" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover" data-bs-touch="true" aria-roledescription="carousel" aria-label="DigiVera Healthcare highlights" >
+    <div className="carousel-indicators">
+      {SLIDES.map((s, i) => (
+        <button
+          key={s.image}
+          type="button"
+          data-bs-target="#hxCarousel"
+          data-bs-slide-to={i}
+          className={i === 0 ? 'active' : undefined}
+          aria-current={i === 0 ? 'true' : undefined}
+          aria-label={`Go to slide ${i + 1}`}
+        />
+      ))}
+    </div>
+
+    <div className="carousel-inner">
+      {SLIDES.map((s, i) => (
+        <div key={s.image} className={`carousel-item${i === 0 ? ' active' : ''}`}>
+          <div className="hx-slide">
+            {/* <img> instead of background-image: lazy loading, priority hints, alt text */}
+            <img
+              className="hx-slide-img"
+              src={s.image}
+              alt={s.alt}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchPriority={i === 0 ? 'high' : 'auto'}
+              decoding="async"
+            />
+            <div className="hx-overlay" aria-hidden="true" />
+            <div className="container h-100">
+              <div className="row h-100 align-items-center">
+                <div className="col-12 col-md-10 col-lg-8 col-xl-7">
+                  <div className="hx-caption">
+                    {i === 0 ? <h1>{s.title}</h1> : <h2 className="hx-title">{s.title}</h2>}
+                    <p>{s.text}</p>
+                    {s.cta && (
+                      <a href={s.cta.href} className="hx-btn">
+                        {s.cta.label}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <button className="carousel-control-prev" type="button" data-bs-target="#hxCarousel" data-bs-slide="prev">
+      <span className="carousel-control-prev-icon" aria-hidden="true" />
+      <span className="visually-hidden">Previous</span>
+    </button>
+    <button className="carousel-control-next" type="button" data-bs-target="#hxCarousel" data-bs-slide="next">
+      <span className="carousel-control-next-icon" aria-hidden="true" />
+      <span className="visually-hidden">Next</span>
+    </button>
+  </section>
+);
 
 export default HeroCarousel;
