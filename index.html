@@ -1,57 +1,61 @@
 <!doctype html>
 <html lang="en">
-  <head>
-        <meta charset="utf-8">
-        <title>Digivera Healthcare - Home</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="keywords">
-        <meta content="" name="description">
-        <meta name="google-site-verification" content="Sbt5_uMmTWYn2wI2ARaatoyJ0zNd6oP_wDMd8-ncB4Y" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-        <!-- Icon Font Stylesheet -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-		<!-- swiper -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-        <!-- Libraries Stylesheet -->
-        <link href="/assets/lib/animate/animate.min.css" rel="stylesheet">
-        <link href="/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <!-- Customized Bootstrap Stylesheet -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-        <!-- Template Stylesheet -->
-        <link rel="stylesheet" href="/assets/css/style.css">
-	    <link href="/assets/css/style-media.css" rel="stylesheet"> 
-      
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/lib/wow/wow.min.js"></script>
-    <script src="/assets/lib/easing/easing.min.js"></script>
-    <script src="/assets/lib/waypoints/waypoints.min.js"></script>
-    <script src="/assets/lib/counterup/counterup.min.js"></script>
-    <script src="/assets/lib/owlcarousel/owl.carousel.min.js"></script>
-    
 
-    <!-- Template Javascript -->
-    <script src="/assets/js/main.js"></script>
-    </head>
+<head>
+  <meta charset="utf-8">
+  <title>Digivera Healthcare - Home</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="keywords"
+    content="Digivera Healthcare, healthcare services, digital healthcare, medical solutions, patient care, healthcare technology, health management, online consultation" />
+  <meta name="description"
+    content="Digivera Healthcare delivers modern, technology-driven healthcare solutions focused on quality patient care, accessibility, and better health outcomes." />
+  <meta name="google-site-verification" content="Sbt5_uMmTWYn2wI2ARaatoyJ0zNd6oP_wDMd8-ncB4Y" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Icon Font Stylesheet -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Libraries Stylesheet -->
+  <link href="/assets/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Template Stylesheet -->
+  <link rel="stylesheet" href="/assets/css/style.min.css" />
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
 
-  <body>
-    <div id="root"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="/assets/lib/wow/wow.min.js"></script>
+  <script src="/assets/lib/easing/easing.min.js"></script>
+  <script src="/assets/lib/waypoints/waypoints.min.js"></script>
+  <script src="/assets/lib/counterup/counterup.min.js"></script>
+  <script src="/assets/lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+  <!-- Template Javascript -->
+  <script src="/assets/js/main.js"></script>
+</head>
+
+<body>
+  <main>
+    <div id="root">
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.addEventListener('scroll', function () {
+        const nav = document.getElementById('hx-header');
+        if (!nav) return;
+        nav.classList.toggle('hx-sticky', window.scrollY > 100);
+      }, { passive: true });
+    </script>
+  </main>
+</body>
 
-	
- 
-
-<script>
-// STICKY NAVBAR
-window.addEventListener('scroll', function() {
-  let nav = document.getElementById('hx-header');
-  nav.classList.toggle('hx-sticky', window.scrollY > 100);
-});
-</script>
-
-  </body>
 </html>

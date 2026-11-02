@@ -46,7 +46,8 @@ const FOUNDERS: Founder[] = [
     name: 'Gourav Sharma',
     image: '/assets/img/3.jpg',
     summary:
-      'Gourav Sharma is the Co-Founder and Managing Director of DigiVera Group and DigiVera Healthcare Services LLP, established in March 2026. With 23+ years of experience in the IT industry, he has led large-scale global technology programs specializing in cloud transformation, operational resilience, automation, and compliance management. Having worked closely with global healthcare clients, Gourav gained valuable insights into healthcare industry challenges and workforce gaps.',
+      // 'Gourav Sharma is the Co-Founder and Managing Director of DigiVera Group and DigiVera Healthcare Services LLP, established in March 2026. With 23+ years of experience in the IT industry, he has led large-scale global technology programs specializing in cloud transformation, operational resilience, automation, and compliance management. Having worked closely with global healthcare clients, Gourav gained valuable insights into healthcare industry challenges and workforce gaps.',
+      'To be a trusted global leader in healthcare workforce solutions, where digital trust meets human care. DigiVera bridges critical talent gaps by delivering skilled medical professionals and reliable equipment support, powered by technology leadership and deep healthcare insight to create scalable, high-impact outcomes for patients and providers alike.',
     details:
       'What began as a discussion to start an IT business evolved into the establishment of DigiVera Healthcare Services LLP with two fellow IT professionals. The name “DigiVera” represents “Digital Trust”. The organization focuses on bridging healthcare workforce gaps by providing skilled nurses, GDAs, physiotherapists, medical support professionals, and critical medical equipment support services. Gourav combines strong technology leadership with healthcare industry understanding and collaboration with domain experts to deliver scalable, reliable, and high-impact healthcare solutions.',
   },
@@ -56,8 +57,7 @@ const FOUNDERS: Founder[] = [
     image: '/assets/img/1.jpg',
     summary:
       'Driving Digital Health through Technology, Shailender Chauhan is the Managing Director & Co-Founder of DigiVera Healthcare LLP, bringing over 20 years of enterprise technology leadership across BFSI, Healthcare, Fintech, and IT Services. A seasoned strategist with deep expertise in Digital Transformation Programs, PMO Governance, SaaS & Cloud Transformation (AWS, Azure), Data Engineering, and Gen AI Analytics, he has successfully delivered large-scale digital programmes for global organisations',
-    details:
-      'and the Ministry of Urban Government of India. His leadership at DigiVera is anchored in making quality healthcare accessible through smart, scalable technology, integrating AI-driven insights, modern data platforms, and agile delivery to transform how healthcare organisations operate and serve patients across India.',
+    details: '',
   },
 ];
 
@@ -68,11 +68,11 @@ const InfoCard = memo(({ icon, title, text, animation }: InfoCardData) => (
     className={`ab-card h-100 ${animation ? `mt-0 wow ${animation}` : ''}`}
     {...(animation && { 'data-wow-delay': '0.1s' })}
   >
-    <div className="ab-icon">
+    <div className="ab-icon rounded-circle">
       <img src={icon} className="why_ico" alt="" width={48} height={48} loading="lazy" />
     </div>
     <div className="abt-text">
-      <h5>{title}</h5>
+      <h2 className="h5">{title}</h2>
       <p>{text}</p>
     </div>
   </div>
@@ -82,32 +82,36 @@ InfoCard.displayName = 'InfoCard';
 const FounderCard = memo(({ id, name, image, summary, details }: Founder) => {
   const [expanded, setExpanded] = useState(false);
   const detailsId = `founder-details-${id}`;
+  const nameId = `founder-name-${id}`;
 
   return (
-    <div className="ts-box orange h-100">
-      <div className="ts-img-wrap">
-        <img src={image} alt={name} loading="lazy" />
+    <article className="card h-100 border-0 rounded-3 overflow-hidden shadow-sm" aria-labelledby={nameId} >
+      {/* Photo: square crop with a yellow accent bar */}
+      <div className="ratio ratio-1x1 bg-body-secondary border-bottom border-warning border-4">
+        <img src={image} alt={name} loading="lazy" decoding="async" width={400} height={400} className="object-fit-cover" />
       </div>
 
-      <div className="ts-content">
-        <h5>{name}</h5>
-        <p className="short-text">{summary}</p>
+      {/* Slightly tighter padding on phones */}
+      <div className="card-body d-flex flex-column p-3 p-lg-4">
+        <h3 id={nameId} className="h5 fw-bold mb-1 text-break">
+          {name}
+        </h3>
 
-        <p id={detailsId} className={`full-text ${expanded ? '' : 'd-none'}`}>
+        <p className="text-body-secondary mb-3">{summary}</p>
+
+        <div id={detailsId} hidden={!expanded} className="bg-warning-subtle border-start border-warning border-3 rounded-end-3 p-3 mb-3 small" >
           {details}
-        </p>
+        </div>
 
-        <button
-          type="button"
-          className="ts-btn read-btn"
-          aria-expanded={expanded}
-          aria-controls={detailsId}
-          onClick={() => setExpanded((prev) => !prev)}
-        >
-          {expanded ? 'Read Less' : 'Read More'}
-        </button>
+        {details && (
+          <button type="button" className="btn btn-outline-dark btn-sm rounded-pill align-self-start mt-auto px-3 fw-semibold text-nowrap" aria-expanded={expanded} aria-controls={detailsId} onClick={() => setExpanded((prev) => !prev)} >
+            {expanded ? 'Read less' : 'Read more'}
+            <i className={`bi ${expanded ? 'bi-chevron-up' : 'bi-chevron-down'} ms-2`} aria-hidden="true" />
+          </button>
+        )}
+
       </div>
-    </div>
+    </article>
   );
 });
 FounderCard.displayName = 'FounderCard';
@@ -122,13 +126,7 @@ const About = () => (
         <div className="row align-items-center g-4">
           {/* Image + experience badge */}
           <div className="col-12 col-md-6 position-relative">
-            <img
-              src="/assets/img/about_img.jpg"
-              className="img-fluid ab-img wow fadeInLeft"
-              data-wow-delay="0.1s"
-              alt="DigiVera healthcare professionals at work"
-              loading="lazy"
-            />
+            <img src="/assets/img/about_img.jpg" className="img-fluid ab-img wow fadeInLeft" data-wow-delay="0.1s" alt="DigiVera healthcare professionals at work" loading="lazy" />
             <div className="ab-exp-box wow fadeInLeft" data-wow-delay="0.7s">
               <h2>7+</h2>
               <p>Years Experience</p>
@@ -169,23 +167,30 @@ const About = () => (
     </section>
 
     {/* FOUNDERS */}
-    <section className="founder-section py-5">
-      <div className="container">
-        <div className="title_sec wow fadeInDown text-center" data-wow-delay="0.1s">
-          <h2 className="main-title">Visionaries Behind Our Success</h2>
-          <p className="subtitle">
-            The visionaries who laid the foundation and continue to drive our growth and
-            innovation.
-          </p>
-        </div>
+    <section className="bg-body-tertiary py-5" aria-labelledby="founders-title">
+      <div className="container py-lg-4">
+        {/* Heading */}
+        <header className="row justify-content-center text-center mb-4 mb-md-5">
+          <div className="col-12 col-md-10 col-lg-7">
+            <h2 id="founders-title" className="display-6 fw-bold mb-3">
+              Visionaries Behind Our Success
+            </h2>
+            <hr className="border-warning border-3 opacity-100 rounded-pill w-25 mx-auto mt-0 mb-3" />
+            <p className="lead text-body-secondary mb-0">
+              The visionaries who laid the foundation and continue to drive our growth and
+              innovation.
+            </p>
+          </div>
+        </header>
 
-        <div className="row g-4 mt-4 mt-md-5 justify-content-center">
+        {/* Cards */}
+        <ul className="row g-4 justify-content-center list-unstyled mb-0">
           {FOUNDERS.map((founder) => (
-            <div className="col-12 col-sm-10 col-md-6 col-lg-4 col-xl-3" key={founder.id}>
+            <li className="col-12 col-md-6" key={founder.id}>
               <FounderCard {...founder} />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   </>

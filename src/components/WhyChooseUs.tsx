@@ -1,95 +1,108 @@
-﻿const WhyChooseUs = () => {
+﻿interface Feature {
+  icon: string;
+  title: string;
+  text: string;
+  animation: string;
+  delay: string;
+}
+
+const TOP_FEATURES: Feature[] = [
+  {
+    icon: '/assets/img/img_1.png',
+    title: 'Verified Professionals',
+    text: 'All staff undergo thorough background checks and credential verification.',
+    animation: 'fadeInLeft',
+    delay: '0.1s',
+  },
+  {
+    icon: '/assets/img/img_2.png',
+    title: '24/7 Availability',
+    text: 'Round-the-clock staffing support for emergency and regular requirements.',
+    animation: 'fadeInRight',
+    delay: '0.1s',
+  },
+];
+
+const BOTTOM_FEATURES: Feature[] = [
+  {
+    icon: '/assets/img/img_3.png',
+    title: 'Industry Compliance',
+    text: 'Fully compliant with healthcare regulations and labour laws.',
+    animation: 'fadeInLeft',
+    delay: '0.1s',
+  },
+  {
+    icon: '/assets/img/img_4.png',
+    title: 'Quick Deployment',
+    text: 'Rapid deployment of trained staff within 24 to 48 hours.',
+    animation: 'fadeInUp',
+    delay: '0.1s',
+  },
+  {
+    icon: '/assets/img/img_5.png',
+    title: 'Quality Assurance',
+    text: 'Continuous performance monitoring and quality reviews.',
+    animation: 'fadeInUp',
+    delay: '0.2s',
+  },
+  {
+    icon: '/assets/img/img_6.png',
+    title: 'Pan-India Reach',
+    text: 'Serving hospitals and healthcare facilities across major Indian cities.',
+    animation: 'fadeInRight',
+    delay: '0.1s',
+  },
+];
+
+const FeatureCard = ({ icon, title, text, animation, delay }: Feature) => (
+  <div className={`zx-card h-100 wow ${animation}`} data-wow-delay={delay}>
+    <div className="zx-icon rounded-circle">
+      <img src={icon} className="why_ico" alt="" width={64} height={64} loading="lazy" />
+    </div>
+    <h3 className="h5">{title}</h3>
+    <p>{text}</p>
+  </div>
+);
+
+const WhyChooseUs = () => {
+  const [left, right] = TOP_FEATURES;
+
   return (
     <section className="zx-why-section py-5">
       <div className="container text-center">
-
         {/* Heading */}
-        <div className="w-100 title_sec wow fadeInDown" data-wow-delay="0.1s">
-          <h2 className="main-title">Why People Chosing Us!</h2>
-          <p className="subtitle">
+        <div className="title_sec wow fadeInDown" data-wow-delay="0.1s">
+          <h2 className="main-title">Why People Choose Us!</h2>
+          <p className="subtitle mx-auto">
             Trusted by 120+ hospitals, we bring reliability, speed, and quality to healthcare
             staffing in India. DigiVera Healthcare Services provides qualified nurses, medical
             support staff, and equipment to hospitals and healthcare institutions across India.
           </p>
         </div>
 
-        {/* TOP ROW */}
         <div className="row align-items-center mt-4 g-4">
-
-          {/* LEFT CARD */}
-          <div className="col-md-3">
-            <div className="zx-card wow fadeInLeft" data-wow-delay="0.1s">
-              <div className="zx-icon">
-                <img src="/assets/img/img_1.png" className="why_ico" alt="img" />
-              </div>
-              <h5>Verified Professionals</h5>
-              <p>All staff undergo thorough background checks and credential verification.</p>
-            </div>
-          </div>
-
-          {/* CENTER IMAGE */}
-          <div className="col-md-6">
+          <div className="col-12 col-lg-6 order-first order-lg-1">
             <div className="zx-image-box wow fadeInDown" data-wow-delay="0.1s">
-              <img src="/assets/img/why.jpg" className="img-fluid" alt="why choose us" />
+              <img src="/assets/img/why.jpg" className="img-fluid" alt="Healthcare professionals at work" loading="lazy" />
             </div>
           </div>
 
-          {/* RIGHT CARD */}
-          <div className="col-md-3">
-            <div className="zx-card wow fadeInRight" data-wow-delay="0.1s">
-              <div className="zx-icon">
-                <img src="/assets/img/img_2.png" className="why_ico" alt="img" />
-              </div>
-              <h5>24/7 Availability</h5>
-              <p>Round-the-clock staffing support for emergency and regular requirements.</p>
-            </div>
+          <div className="col-12 col-sm-6 col-lg-3 order-lg-0">
+            <FeatureCard {...left} />
           </div>
 
+          <div className="col-12 col-sm-6 col-lg-3 order-lg-2">
+            <FeatureCard {...right} />
+          </div>
         </div>
 
-        {/* BOTTOM CARDS */}
+        {/* Bottom row */}
         <div className="row mt-2 g-4">
-
-          <div className="col-md-3 col-sm-6">
-            <div className="zx-card wow fadeInLeft" data-wow-delay="0.1s">
-              <div className="zx-icon">
-                <img src="/assets/img/img_3.png" className="why_ico" alt="img" />
-              </div>
-              <h5>Industry Compliance</h5>
-              <p>Fully compliant with healthcare regulations and labour laws.</p>
+          {BOTTOM_FEATURES.map((feature) => (
+            <div key={feature.title} className="col-12 col-sm-6 col-lg-3">
+              <FeatureCard {...feature} />
             </div>
-          </div>
-
-          <div className="col-md-3 col-sm-6">
-            <div className="zx-card wow fadeInUp" data-wow-delay="0.1s">
-              <div className="zx-icon">
-                <img src="/assets/img/img_4.png" className="why_ico" alt="img" />
-              </div>
-              <h5>Quick Deployment</h5>
-              <p>Rapid deployment of trained staff within 24 to 48 hours.</p>
-            </div>
-          </div>
-
-          <div className="col-md-3 col-sm-6">
-            <div className="zx-card wow fadeInUp" data-wow-delay="0.2s">
-              <div className="zx-icon">
-                <img src="/assets/img/img_5.png" className="why_ico" alt="img" />
-              </div>
-              <h5>Quality Assurance</h5>
-              <p>Continuous performance monitoring and quality reviews.</p>
-            </div>
-          </div>
-
-          <div className="col-md-3 col-sm-6">
-            <div className="zx-card wow fadeInRight" data-wow-delay="0.1s">
-              <div className="zx-icon">
-                <img src="/assets/img/img_6.png" className="why_ico" alt="img" />
-              </div>
-              <h5>Pan-India Reach</h5>
-              <p>Serving hospitals and healthcare facilities across major Indian cities.</p>
-            </div>
-          </div>
-
+          ))}
         </div>
       </div>
     </section>

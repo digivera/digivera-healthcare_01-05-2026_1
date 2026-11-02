@@ -4,11 +4,10 @@ import HeroCarousel from '../components/HeroCarousel';
 import WhyChooseUs from '../components/WhyChooseUs';
 import About from '../components/About';
 import Facts from '../components/Facts';
-import Services from '../components/Services';
 import Industries from '../components/Industries';
-import Contact from '../components/Contact';
 import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
+import Clients from '../components/Clients';
 
 const Dashboard = () => {
   return (
@@ -19,13 +18,10 @@ const Dashboard = () => {
       <WhyChooseUs />
       <About />
       <Facts />
-      <Services />
-      
       <Industries />
-      <Contact />
       <Testimonials />
+      <Clients />
       <Footer />
-      
     </>
   );
 };

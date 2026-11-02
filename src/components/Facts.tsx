@@ -1,63 +1,53 @@
-﻿import CountUpNumber from './CountUpNumber';
+﻿import { memo } from 'react';
+import CountUpNumber from './CountUpNumber';
 
-const Facts = () => {
-  return (
-    <section className="fx-section pb-5">
-      <div className="container">
+interface Fact {
+  id: string;
+  icon: string;
+  target: number;
+  label: string;
+  animation: 'fadeInDown' | 'fadeInUp' | 'fadeInRight';
+}
 
-        <div className="row align-items-center g-4">
+// Static data lives outside the component, so it's created once, not on every render
+const FACTS: readonly Fact[] = [
+  { id: 'professionals', icon: '/assets/img/img_10.png', target: 50,  label: 'Medical Professionals', animation: 'fadeInDown' },
+  { id: 'hospitals',     icon: '/assets/img/img_11.png', target: 120, label: 'Partner Hospitals',     animation: 'fadeInUp' },
+  { id: 'cities',        icon: '/assets/img/img_12.png', target: 15,  label: 'Cities Covered',        animation: 'fadeInRight' },
+];
 
-          {/* LEFT TITLE */}
-          <div className="col-md-3">
-            <h2 className="main-title wow fadeInLeft" data-wow-delay="0.1s">
-              Important<br />Facts
-            </h2>
-          </div>
+const Facts = () => (
+  <section className="fx-section pb-5">
+    <div className="container">
+      <div className="row align-items-center g-4">
 
-          {/* FACT 1 */}
-          <div className="col-md-3">
-            <div className="fx-box wow fadeInDown" data-wow-delay="0.1s">
-              <div className="d-flex fxin">
-                <div className="fx-icon">
-                  <img src="/assets/img/img_10.png" className="why_ico" alt="img" />
-                </div>
-                <h3><CountUpNumber target={50} className="counter" />+</h3>
-              </div>
-              <p>Medical Professionals</p>
-            </div>
-          </div>
-
-          {/* FACT 2 */}
-          <div className="col-md-3">
-            <div className="fx-box wow fadeInUp" data-wow-delay="0.1s">
-              <div className="d-flex fxin">
-                <div className="fx-icon">
-                  <img src="/assets/img/img_11.png" className="why_ico" alt="img" />
-                </div>
-                <h3><CountUpNumber target={120} className="counter" />+</h3>
-              </div>
-              <p>Partner Hospitals</p>
-            </div>
-          </div>
-
-          {/* FACT 3 */}
-          <div className="col-md-3">
-            <div className="fx-box wow fadeInRight" data-wow-delay="0.1s">
-              <div className="d-flex fxin">
-                <div className="fx-icon">
-                  <img src="/assets/img/img_12.png" className="why_ico" alt="img" />
-                </div>
-                <h3><CountUpNumber target={15} className="counter" />+</h3>
-              </div>
-              <p>Cities Covered</p>
-            </div>
-          </div>
-
+        {/* Left title */}
+        <div className="col-md-3">
+          <h2 className="main-title wow fadeInLeft" data-wow-delay="0.1s">
+            Important<br />Facts
+          </h2>
         </div>
 
-      </div>
-    </section>
-  );
-};
+        {/* Facts */}
+        {FACTS.map(({ id, icon, target, label, animation }) => (
+          <div className="col-md-3" key={id}>
+            <div className={`fx-box wow ${animation}`} data-wow-delay="0.1s">
+              <div className="d-flex fxin">
+                <div className="fx-icon rounded-circle">
+                  <img src={icon} className="why_ico" alt={label} width={40} height={40} loading="lazy"decoding="async" />
+                </div>
+                <h3>
+                  <CountUpNumber target={target} className="counter" />+
+                </h3>
+              </div>
+              <p>{label}</p>
+            </div>
+          </div>
+        ))}
 
-export default Facts;
+      </div>
+    </div>
+  </section>
+);
+
+export default memo(Facts);
