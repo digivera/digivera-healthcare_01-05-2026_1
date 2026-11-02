@@ -6,9 +6,6 @@ import Services from './pages/Services';
 import Industries from './pages/Industries';
 import FAQ from './pages/FAQ';
 
-
-
-
 function App() {
   return (
     <BrowserRouter>

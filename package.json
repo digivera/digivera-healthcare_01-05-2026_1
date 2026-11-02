@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "css:min": "lightningcss --minify --bundle public/assets/css/style.css -o public/assets/css/style.min.css",
+    "prebuild": "npm run css:min"
   },
   "dependencies": {
+    "lucide-react": "^1.63.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.2"
@@ -24,6 +27,8 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "lightningcss": "^1.33.0",
+    "lightningcss-cli": "^1.33.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.3.3"

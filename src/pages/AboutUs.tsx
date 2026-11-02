@@ -15,10 +15,7 @@ const AboutUs = () => {
       <div id="hxCarousel" className="carousel slide">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <div
-              className="hx-carousel-item innerpage"
-              style={{ backgroundImage: "url('/assets/img/hero_1.jpg')" }}
-            >
+            <div className="hx-carousel-item innerpage" style={{ backgroundImage: "url('/assets/img/hero_1.jpg')" }} >
               <div className="hx-overlay"></div>
               <div className="container">
                 <div className="hx-caption hx-animate">

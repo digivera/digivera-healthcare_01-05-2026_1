@@ -3,44 +3,18 @@
 const Header = () => {
   return (
     <>
-      {/* TOP BAR */}
-      <div className="hx-topbar">
-        <div className="container d-flex justify-content-between">
-          <div className="locationmap">
-            <i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India
-          </div>
-          <div className="top-right-menu">
-            <Link to="/">Home</Link> /{' '}
-            <Link to="/contact-us">Support</Link> /{' '}
-            <a href="/terms">Terms</a> /{' '}
-            <Link to="/faq">FAQs</Link>
-          </div>
-        </div>
-      </div>
-
       {/* HEADER */}
       <div className="hx-header text-center">
         <div className="container">
           <div className="w-100 d-flex justify-content-between align-items-center header">
-
-            <div className="d-flex ctop callus wow fadeInLeft" data-wow-delay="0.1s"><i className="bi bi-telephone"></i> <span><strong>Call Now</strong> +91 8796294441</span></div>
-
             <div className="mb-0 logobox wow fadeInDown" data-wow-delay="0.1s"><a className="brandlogo" href="/"><img src="/assets/img/logo.png" className="navbar-brand p-0" alt="Logo" /></a></div>
-
-            <div className="d-flex ctop emailus wow fadeInRight" data-wow-delay="0.1s"><span><strong>Email Now</strong>Healthcareservices@digivera.co.in</span> <i className="bi bi-envelope"></i></div>
-
           </div>
 
           {/* NAVBAR */}
-          <div className="w-100 d-flex justify-content-between align-items-center navigation_sec">
+          <div className="w-100 d-flex justify-content-between align-items-center navigation_sec rounded-3">
             {/* TOGGLER */}
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navMenu"
-            >
-              <i className="fas fa-bars"></i>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation menu" >
+              <i className="fas fa-bars" aria-hidden="true"></i>
             </button>
 
             <nav className="navbar navbar-expand-lg navbar-light bg-light hx-navbar" id="hxNav">
@@ -72,9 +46,15 @@ const Header = () => {
             </nav>
 
             <div className="hx-social wow fadeInRight" data-wow-delay="0.1s">
-              <a href="#"><i className="bi bi-instagram"></i></a>
-              <a href="#"><i className="bi bi-facebook"></i></a>
-              <a href="#"><i className="bi bi-youtube"></i></a>
+              <a href="javascript:void(0)" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                <i className="bi bi-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0)" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                <i className="bi bi-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0)" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+                <i className="bi bi-youtube" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
         </div>

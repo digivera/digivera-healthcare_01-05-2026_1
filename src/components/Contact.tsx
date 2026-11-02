@@ -1,131 +1,87 @@
-﻿const Contact = () => {
-  return (
-    <section className="ct-section py-5">
-      <div className="container">
+﻿const contacts = [
+  {
+    icon: "bi-telephone",
+    label: "Call us",
+    value: "+91 87962 94441",
+    href: "tel:+918796294441",
+  },
+  {
+    icon: "bi-telephone",
+    label: "Call us (alternate)",
+    value: "+91 87962 94442",
+    href: "tel:+918796294442",
+  },
+  {
+    icon: "bi-envelope",
+    label: "Email us",
+    value: "Healthcareservices@digivera.co.in",
+    href: "mailto:Healthcareservices@digivera.co.in",
+  },
+  {
+    icon: "bi-geo-alt",
+    label: "Visit us",
+    value: "Sector 8, Vasundhara, Noida, Ghaziabad, Uttar Pradesh 201012",
+    href: "https://www.google.com/maps/search/?api=1&query=DigiVera+Technologies+Vasundhara+Ghaziabad",
+  },
+];
 
+const Contact = () => {
+  return (
+    <section className="py-5 bg-body-tertiary">
+      <div className="container py-lg-4">
         {/* TOP TITLE */}
-        <div className="w-100 title_sec wow fadeInDown" data-wow-delay="0.1s">
-          <div className="text-center mb-5">
-            <h2 className="main-title">
-              We Ensure You Will Always<br />Get Best Results
-            </h2>
-            <p className="subtitle">
-              Trusted by 120+ hospitals, we bring reliability, speed, and quality to healthcare
-              staffing in India.
-            </p>
-          </div>
+        <div className="text-center mx-auto mb-5 wow fadeInDown" data-wow-delay="0.1s" style={{ maxWidth: 640 }}>
+          <h2 className="display-5 fw-bold mb-3">
+            We ensure you will always
+            <br />
+            get the best results
+          </h2>
+          <p className="lead text-secondary mb-0">
+            Trusted by 120+ hospitals, we bring reliability, speed and quality
+            to healthcare staffing in India.
+          </p>
         </div>
 
-        <div className="row align-items-start">
+        <div className="row g-0 rounded-4 overflow-hidden shadow-lg bg-white wow fadeInUp" data-wow-delay="0.15s">
+          {/* LEFT: contact details */}
+          <div className="col-lg-5">
+            <div className="h-100 p-4 p-md-5 text-bg-primary">
+              <h4 className="fw-bold mb-2">Have a query? Feel free to contact us</h4>
+              <p className="text-white-50 mb-4">
+                Tell us what your hospital needs. We'll get back to you quickly.
+              </p>
 
-          {/* LEFT SIDE */}
-          <div className="col-lg-5 mb-4">
-            <div className="w-100 wow fadeInLeft" data-wow-delay="0.1s">
-              <h4 className="ct-heading">
-                Have any query?<br />Feel Free to Contact Us
-              </h4>
-             
-              <div className="ct-info">
-                <p className="call_ct">
-                  <i className="bi bi-telephone"></i> <strong>+91 87962 94441</strong>
-                  
-                </p>
-                 <hr />
-                 <p className="call_ct">
-                  <i className="bi bi-telephone"></i> <strong>+91 87962 94442</strong>
-               
-                </p>
-                 <hr />
-                 <p className="call_ct">
-                  <i className="bi bi-telephone"></i> <strong>+91 87962 94443</strong>
-                 
-
-                </p>
-                 <hr />
-                <p><i className="bi bi-envelope"></i> Healthcareservices@digivera.co.in</p>
-                  <hr />
-               
-                <p><i className="bi bi-geo-alt"></i> Noida, Uttar Pradesh, India</p>
-              </div>
+              <ul className="list-unstyled mb-0 d-flex flex-column gap-4">
+                {contacts.map((c) => (
+                  <li key={c.value}>
+                    <a href={c.href} className="d-flex align-items-center gap-3 text-white text-decoration-none"
+                      {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                      <span className="flex-shrink-0 d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-3 p-3 fs-5">
+                        <i className={`bi ${c.icon}`}></i>
+                      </span>
+                      <span className="d-flex flex-column">
+                        <small className="text-white-50">{c.label}</small>
+                        <strong className="text-break">{c.value}</strong>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-          <div className="col-lg-7">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3500.869429370953!2d77.3648963!3d28.663628!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfbe7f2a1e783%3A0x1824eadd2cf48d44!2sDigiVera%20Technologies!5e0!3m2!1sen!2sin!4v1778048257946!5m2!1sen!2sin"
-              style={{ border: 0,height: '400px', width: '100%' }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          {/* RIGHT FORM — hidden
-          <div className="col-lg-7">
-            <form className="ct-form wow fadeInRight" data-wow-delay="0.1s" onSubmit={handleSubmit} noValidate>
-              {submitMessage && (
-                <div className={`alert ${submitMessage.type === 'success' ? 'alert-success' : 'alert-danger'}`} role="alert">
-                  {submitMessage.text}
-                </div>
-              )}
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <input
-                    type="text"
-                    placeholder="Name.."
-                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                    value={formData.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                  />
-                  {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-                </div>
-                <div className="col-md-6">
-                  <input
-                    type="text"
-                    placeholder="Company / Organization.."
-                    className="form-control"
-                    value={formData.company}
-                    onChange={(e) => handleChange('company', e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <input
-                    type="email"
-                    placeholder="Email.."
-                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                    value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                  />
-                  {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-                </div>
-                <div className="col-md-6">
-                  <input
-                    type="text"
-                    placeholder="Mobile Number.."
-                    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                    value={formData.phone}
-                    onChange={(e) => handleChange('phone', e.target.value)}
-                  />
-                  {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-                </div>
-                <div className="col-12">
-                  <textarea
-                    rows={5}
-                    placeholder="Message.."
-                    className={`form-control ${errors.message ? 'is-invalid' : ''}`}
-                    value={formData.message}
-                    onChange={(e) => handleChange('message', e.target.value)}
-                  ></textarea>
-                  {errors.message && <div className="invalid-feedback">{errors.message}</div>}
-                </div>
-                <div className="col-12">
-                  <button className="ct-btn w-100" disabled={isSubmitting}>
-                    {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-          */}
 
+          {/* RIGHT: map */}
+          <div className="col-lg-7">
+            <div className="position-relative h-100" style={{ minHeight: 380 }}>
+              <iframe title="DigiVera Technologies location" className="position-absolute top-0 start-0 w-100 h-100 border-0"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3500.869429370953!2d77.3648963!3d28.663628!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfbe7f2a1e783%3A0x1824eadd2cf48d44!2sDigiVera%20Technologies!5e0!3m2!1sen!2sin!4v1778048257946!5m2!1sen!2sin" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+              <a className="btn btn-light rounded-pill shadow fw-semibold position-absolute bottom-0 start-0 m-3 px-4" href="https://www.google.com/maps/dir/?api=1&destination=DigiVera+Technologies+Vasundhara+Ghaziabad" target="_blank" rel="noopener noreferrer">
+                <i className="bi bi-signpost-split me-2 text-primary"></i>
+                Get directions
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
