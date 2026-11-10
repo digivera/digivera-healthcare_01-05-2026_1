@@ -11,10 +11,10 @@ const quickLinks = [
 
 // Replace "#" with your real profile URLs
 const socials = [
-  { label: 'Instagram', href: '#', icon: 'bi-instagram' },
-  { label: 'Facebook', href: '#', icon: 'bi-facebook' },
-  { label: 'YouTube', href: '#', icon: 'bi-youtube' },
-  { label: 'LinkedIn', href: '#', icon: 'bi-linkedin' },
+  { label: 'Instagram', href: 'javascript:void(0)', icon: 'bi-instagram' },
+  { label: 'Facebook', href: 'javascript:void(0)', icon: 'bi-facebook' },
+  { label: 'YouTube', href: 'javascript:void(0)', icon: 'bi-youtube' },
+  { label: 'LinkedIn', href: 'javascript:void(0)', icon: 'bi-linkedin' },
 ];
 
 // Replace with your real contact details
@@ -32,7 +32,7 @@ const Footer = () => {
 
           {/* BRAND */}
           <div className="col-lg-4 text-center text-lg-start">
-            <img src="/assets/img/logo.png" alt="Digivera Healthcare Services" className="mb-3" style={{ maxHeight: 56 }} />
+            <img src="/assets/img/logo.webp" alt="Digivera Healthcare Services"  width={1352} height={385} className="mb-3" loading="lazy" style={{ height: 56, width: 'auto' }} />
             <p className="text-light text-opacity-75 mx-auto mx-lg-0" style={{ maxWidth: 360 }}>
               Reliable healthcare support services that help providers spend less time on
               paperwork and more time on patients.

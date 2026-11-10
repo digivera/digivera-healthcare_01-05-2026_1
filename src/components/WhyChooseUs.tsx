@@ -59,7 +59,7 @@ const FeatureCard = ({ icon, title, text, animation, delay }: Feature) => (
     <div className="zx-icon rounded-circle">
       <img src={icon} className="why_ico" alt="" width={64} height={64} loading="lazy" />
     </div>
-    <h3 className="h5">{title}</h3>
+    <h3 className="h5 mt-2">{title}</h3>
     <p>{text}</p>
   </div>
 );

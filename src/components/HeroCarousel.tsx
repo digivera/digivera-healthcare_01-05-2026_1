@@ -57,7 +57,7 @@ const HeroCarousel = () => (
                 <div className="row h-100 align-items-center">
                   <div className="col-12 col-md-10 col-lg-8 col-xl-7">
                     <div className="hx-caption">
-                      {i === 0 ? <h1>{s.title}</h1> : <h2 className="hx-title">{s.title}</h2>}
+                      <h1>{s.title}</h1>
                       <p>{s.text}</p>
                       <button type="button" className="hx-btn" data-bs-toggle="modal" data-bs-target={`#${REQUEST_STAFF_MODAL_ID}`} >
                         {s.label}
