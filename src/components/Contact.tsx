@@ -69,7 +69,7 @@ const Contact = () => {
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
                   >
-                    <span className="flex-shrink-0 d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle fs-5" style={{ width: 48, height: 48 }} >
+                    <span className="flex-shrink-0 d-inline-flex align-items-center justify-content-center bg-primary-subtle bg-gradient text-primary rounded-circle fs-5 shadow border border-2 border-white" style={{ width: 48, height: 48 }} >
                       <i className={`bi ${c.icon}`}></i>
                     </span>
                     <span className="d-flex flex-column flex-grow-1">
@@ -93,7 +93,8 @@ const Contact = () => {
                 <div className="position-absolute bottom-0 start-0 end-0 m-3">
                   <div className="bg-white rounded-3 shadow p-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div className="d-flex align-items-center gap-3">
-                      <span className="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle flex-shrink-0" style={{ width: 40, height: 40 }} >
+                      <span className="d-inline-flex align-items-center justify-content-center bg-custom bg-gradient text-white rounded-circle flex-shrink-0 shadow-lg border border-3 border-light border-opacity-25"
+                        style={{ width: 40, height: 40 }}>
                         <i className="bi bi-geo-alt-fill"></i>
                       </span>
                       <div className="lh-sm">
