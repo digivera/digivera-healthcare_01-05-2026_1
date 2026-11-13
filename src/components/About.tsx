@@ -1,17 +1,22 @@
-﻿import { memo, useState } from 'react';
+﻿import { memo, useId, useState } from 'react';
+
+/* Bootstrap 5.3 only: no custom CSS file, no inline styles, no animation library.
+   Bootstrap Icons (bi-*) is used for the chevron, as in your original code. */
 
 /* ----------------------------- Types ----------------------------- */
 
-type InfoCardData = {
+type Pillar = { label: string; note: string };
+
+type Principle = {
   icon: string;
   title: string;
   text: string;
-  animation?: 'fadeInLeft' | 'fadeInRight';
 };
 
 type Founder = {
   id: string;
   name: string;
+  role?: string;
   image: string;
   summary: string;
   details: string;
@@ -19,24 +24,26 @@ type Founder = {
 
 /* ----------------------------- Data ------------------------------ */
 
-const FOUNDATION: InfoCardData = {
-  icon: '/assets/img/img_7.png',
-  title: 'Our Foundation',
-  text: 'Our foundation is built on reliability, quality, scalability, and trust, making us a dependable partner in the healthcare ecosystem.',
-};
+const FOUNDATION_TEXT =
+  'Our foundation is built on reliability, quality, scalability, and trust, making us a dependable partner in the healthcare ecosystem.';
 
-const VISION_MISSION: InfoCardData[] = [
+const PILLARS: Pillar[] = [
+  { label: 'Reliability', note: 'Shifts covered, every time' },
+  { label: 'Quality', note: 'Trained, vetted professionals' },
+  { label: 'Scalability', note: 'From one clinic to a hospital network' },
+  { label: 'Trust', note: 'Compliance and clear systems' },
+];
+
+const PRINCIPLES: Principle[] = [
   {
     icon: '/assets/img/img_8.png',
     title: 'Our Vision',
     text: 'To be a trusted leader in healthcare support services, delivering innovative workforce and technology solutions that elevate patient care and operational excellence.',
-    animation: 'fadeInLeft',
   },
   {
     icon: '/assets/img/img_9.png',
     title: 'Our Mission',
     text: 'To empower healthcare providers with reliable manpower and smart solutions, enabling them to focus on delivering exceptional patient outcomes.',
-    animation: 'fadeInRight',
   },
 ];
 
@@ -46,7 +53,6 @@ const FOUNDERS: Founder[] = [
     name: 'Gourav Sharma',
     image: '/assets/img/3.jpg',
     summary:
-      // 'Gourav Sharma is the Co-Founder and Managing Director of DigiVera Group and DigiVera Healthcare Services LLP, established in March 2026. With 23+ years of experience in the IT industry, he has led large-scale global technology programs specializing in cloud transformation, operational resilience, automation, and compliance management. Having worked closely with global healthcare clients, Gourav gained valuable insights into healthcare industry challenges and workforce gaps.',
       'To be a trusted global leader in healthcare workforce solutions, where digital trust meets human care. DigiVera bridges critical talent gaps by delivering skilled medical professionals and reliable equipment support, powered by technology leadership and deep healthcare insight to create scalable, high-impact outcomes for patients and providers alike.',
     details:
       'What began as a discussion to start an IT business evolved into the establishment of DigiVera Healthcare Services LLP with two fellow IT professionals. The name “DigiVera” represents “Digital Trust”. The organization focuses on bridging healthcare workforce gaps by providing skilled nurses, GDAs, physiotherapists, medical support professionals, and critical medical equipment support services. Gourav combines strong technology leadership with healthcare industry understanding and collaboration with domain experts to deliver scalable, reliable, and high-impact healthcare solutions.',
@@ -63,103 +69,175 @@ const FOUNDERS: Founder[] = [
 
 /* --------------------------- Components -------------------------- */
 
-const InfoCard = memo(({ icon, title, text, animation }: InfoCardData) => (
-  <div
-    className={`ab-card h-100 ${animation ? `mt-0 wow ${animation}` : ''}`}
-    {...(animation && { 'data-wow-delay': '0.1s' })}
-  >
-    <div className="ab-icon rounded-circle">
-      <img src={icon} className="why_ico" alt="" width={48} height={48} loading="lazy" />
-    </div>
-    <div className="abt-text">
-      <h2 className="h5">{title}</h2>
-      <p>{text}</p>
-    </div>
-  </div>
+const PillarList = memo(() => (
+  <ul className="row row-cols-1 row-cols-sm-2 g-3 list-unstyled mb-0">
+    {PILLARS.map(({ label, note }) => (
+      <li className="col" key={label}>
+        <div className="h-100 bg-body border-start border-dark border-4 rounded-end-3 shadow-sm p-3">
+          <strong className="d-block h5 mb-1">{label}</strong>
+          <span className="small text-body-secondary">{note}</span>
+        </div>
+      </li>
+    ))}
+  </ul>
 ));
-InfoCard.displayName = 'InfoCard';
+PillarList.displayName = 'PillarList';
 
-const FounderCard = memo(({ id, name, image, summary, details }: Founder) => {
-  const [expanded, setExpanded] = useState(false);
-  const detailsId = `founder-details-${id}`;
-  const nameId = `founder-name-${id}`;
+const PrincipleCard = memo(({ icon, title, text }: Principle) => (
+  <article className="h-100 border-top border-warning border-3 pt-4">
+    <span className="d-inline-flex bg-custom rounded-circle p-2 mb-3">
+      <img src={icon} alt="" width={40} height={40} loading="lazy" decoding="async" />
+    </span>
+    <h3 className="text-white fw-bold">{title}</h3>
+    <p className="mb-0 opacity-75">{text}</p>
+  </article>
+));
+PrincipleCard.displayName = 'PrincipleCard';
 
-  return (
-    <article className="card h-100 border-0 rounded-3 overflow-hidden shadow-sm" aria-labelledby={nameId} >
-      {/* Photo: square crop with a yellow accent bar */}
-      <div className="ratio ratio-1x1 bg-body-secondary border-bottom border-warning border-4">
-        <img src={image} alt={name} loading="lazy" decoding="async" width={400} height={400} className="object-fit-cover" />
-      </div>
+const FounderCard = memo(
+  ({ name, role, image, summary, details, reverse }: Founder & { reverse: boolean }) => {
+    const [open, setOpen] = useState(false);
+    const uid = useId();
+    const detailsId = `${uid}-details`;
+    const nameId = `${uid}-name`;
 
-      {/* Slightly tighter padding on phones */}
-      <div className="card-body d-flex flex-column p-3 p-lg-4">
-        <h3 id={nameId} className="h5 fw-bold mb-1 text-break">
-          {name}
-        </h3>
-
-        <p className="text-body-secondary mb-3">{summary}</p>
-
-        <div id={detailsId} hidden={!expanded} className="bg-warning-subtle border-start border-warning border-3 rounded-end-3 p-3 mb-3 small" >
-          {details}
+    return (
+      <article
+        className={`row g-4 g-lg-5 align-items-center ${reverse ? 'flex-md-row-reverse' : ''}`}
+        aria-labelledby={nameId}
+      >
+        {/* Photo */}
+        <div className="col-12 col-sm-8 col-md-5 col-lg-4 mx-auto">
+          <div className="ratio ratio-1x1 bg-body-secondary rounded-4 overflow-hidden border border-warning border-4 shadow">
+            <img
+              src={image}
+              alt={name}
+              width={400}
+              height={400}
+              loading="lazy"
+              decoding="async"
+              className="object-fit-cover"
+            />
+          </div>
         </div>
 
-        {details && (
-          <button type="button" className="btn btn-outline-dark btn-sm rounded-pill align-self-start mt-auto px-3 fw-semibold text-nowrap" aria-expanded={expanded} aria-controls={detailsId} onClick={() => setExpanded((prev) => !prev)} >
-            {expanded ? 'Read less' : 'Read more'}
-            <i className={`bi ${expanded ? 'bi-chevron-up' : 'bi-chevron-down'} ms-2`} aria-hidden="true" />
-          </button>
-        )}
+        {/* Text */}
+        <div className="col-12 col-md-7 col-lg-8">
+          <h3 id={nameId} className="h2 fw-bold mb-1 text-break">
+            {name}
+          </h3>
+          {role && <p className="fw-semibold text-success mb-3">{role}</p>}
 
-      </div>
-    </article>
-  );
-});
+          <p className="text-body-secondary mt-2">{summary}</p>
+
+          {details && (
+            <>
+              <div id={detailsId} className={`collapse ${open ? 'show' : ''}`}>
+                <p className="bg-warning-subtle border-start border-warning border-4 rounded-end-3 p-3 mb-3 small">
+                  {details}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-outline-dark rounded-pill px-4 fw-semibold"
+                aria-expanded={open}
+                aria-controls={detailsId}
+                onClick={() => setOpen((v) => !v)}
+              >
+                {open ? 'Read less' : 'Read their story'}
+                <i
+                  className={`bi ${open ? 'bi-chevron-up' : 'bi-chevron-down'} ms-2`}
+                  aria-hidden="true"
+                />
+              </button>
+            </>
+          )}
+        </div>
+      </article>
+    );
+  },
+);
 FounderCard.displayName = 'FounderCard';
 
 /* ------------------------------ Page ----------------------------- */
 
 const About = () => (
-  <>
-    {/* ABOUT */}
-    <section className="ab-section content-sec py-5">
-      <div className="container">
-        <div className="row align-items-center g-4">
-          {/* Image + experience badge */}
-          <div className="col-12 col-md-6 position-relative">
-            <img src="/assets/img/about_img.jpg" className="img-fluid ab-img wow fadeInLeft" data-wow-delay="0.1s" alt="DigiVera healthcare professionals at work" loading="lazy" />
-            <div className="ab-exp-box wow fadeInLeft" data-wow-delay="0.7s">
-              <h2>7+</h2>
-              <p>Years Experience</p>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="col-12 col-md-6 wow fadeInDown" data-wow-delay="0.1s">
-            <p>
-              <span className="lb-tag">ABOUT US</span>
+  <main className="overflow-x-hidden">
+    {/* HERO */}
+    <section className="py-5 border-bottom border-warning border-5" aria-labelledby="about-title">
+      <div className="container py-lg-4">
+        <div className="row align-items-center g-4 g-lg-5">
+          <div className="col-12 col-lg-7 order-2 order-lg-1">
+            <p className="fw-semibold text-success mb-2">
+              About DigiVera Healthcare Services LLP
             </p>
-            <h2 className="main-title">Modern Healthcare Support for a Digital Age</h2>
-
-            <p className="ab-text">
-              DigiVera Healthcare Services LLP is a modern healthcare support organization
-              committed to delivering skilled manpower and smart operational solutions to
-              hospitals, clinics, and healthcare institutions.
+            <h1 id="about-title" className="display-4 fw-bold lh-1 mb-4">
+              Modern healthcare support for a digital age
+            </h1>
+            <p className="lead fw-medium mb-3">
+              We are a healthcare support organization delivering skilled manpower and smart
+              operational solutions to hospitals, clinics, and healthcare institutions.
             </p>
-            <p className="ab-text">
+            <p className="text-body-secondary mb-0">
               By combining trained professionals with technology-driven systems, we help
               healthcare providers streamline operations, maintain compliance, and focus on
               delivering high-quality patient care.
             </p>
+          </div>
 
-            <InfoCard {...FOUNDATION} />
+          {/* Arch-shaped photo with experience badge */}
+          <div className="col-12 col-sm-8 col-md-6 col-lg-5 order-1 order-lg-2 mx-auto">
+            <div className="position-relative">
+              <div className="ratio ratio-1x1 bg-body-secondary rounded-top-pill rounded-bottom-4 overflow-hidden border border-warning border-4">
+                <img
+                  src="/assets/img/about_img.jpg"
+                  alt="DigiVera healthcare professionals at work"
+                  width={640}
+                  height={640}
+                  fetchPriority="high"
+                  decoding="async"
+                  className="object-fit-cover"
+                />
+              </div>
+              <div
+                className="position-absolute bottom-0 start-0 m-3 bg-dark text-white rounded-4 shadow px-4 py-3 text-center lh-sm"
+                role="img"
+                aria-label="Over 7 years of experience"
+              >
+                <b className="d-block display-5 fw-bold text-warning">7+</b>
+                <span className="small">years in care support</span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        {/* Vision & Mission */}
-        <div className="row mt-4 g-4">
-          {VISION_MISSION.map((card) => (
-            <div className="col-12 col-md-6" key={card.title}>
-              <InfoCard {...card} />
+    {/* FOUNDATION */}
+    <section className="bg-warning-subtle py-5" aria-labelledby="foundation-title">
+      <div className="container py-lg-4">
+        <div className="row g-4 g-lg-5 align-items-center">
+          <div className="col-12 col-lg-5">
+            <h2 id="foundation-title" className="display-6 fw-bold mb-3">
+              Our Foundation
+            </h2>
+            <p className="fs-5 text-body-secondary mb-0">{FOUNDATION_TEXT}</p>
+          </div>
+          <div className="col-12 col-lg-7">
+            <PillarList />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* VISION & MISSION */}
+    <section className="bg-dark text-white py-5" aria-label="Vision and mission">
+      <div className="container py-lg-4">
+        <div className="row g-4 g-lg-5">
+          {PRINCIPLES.map((p) => (
+            <div className="col-12 col-md-6" key={p.title}>
+              <PrincipleCard {...p} />
             </div>
           ))}
         </div>
@@ -169,31 +247,28 @@ const About = () => (
     {/* FOUNDERS */}
     <section className="bg-body-tertiary py-5" aria-labelledby="founders-title">
       <div className="container py-lg-4">
-        {/* Heading */}
-        <header className="row justify-content-center text-center mb-4 mb-md-5">
+        <header className="row justify-content-center text-center mb-5">
           <div className="col-12 col-md-10 col-lg-7">
             <h2 id="founders-title" className="display-6 fw-bold mb-3">
-              Visionaries Behind Our Success
+              Visionaries behind our success
             </h2>
             <hr className="border-warning border-3 opacity-100 rounded-pill w-25 mx-auto mt-0 mb-3" />
             <p className="lead text-body-secondary mb-0">
-              The visionaries who laid the foundation and continue to drive our growth and
-              innovation.
+              The people who laid the foundation and continue to drive our growth and innovation.
             </p>
           </div>
         </header>
 
-        {/* Cards */}
-        <ul className="row g-4 justify-content-center list-unstyled mb-0">
-          {FOUNDERS.map((founder) => (
-            <li className="col-12 col-md-6" key={founder.id}>
-              <FounderCard {...founder} />
+        <ul className="d-flex flex-column gap-5 list-unstyled mb-0">
+          {FOUNDERS.map((f, i) => (
+            <li key={f.id}>
+              <FounderCard {...f} reverse={i % 2 === 1} />
             </li>
           ))}
         </ul>
       </div>
     </section>
-  </>
+  </main>
 );
 
 export default About;

@@ -3,14 +3,22 @@ import {
   AlertCircle, Building2, ClipboardList, FileText, HeartPulse, Hash, Mail, MapPin, MapPinned, Phone, Send, Stethoscope, User, UserRound, Users, type LucideIcon
 } from 'lucide-react';
 import ResultModal from '../components/Resultmodal';
+import Recaptcha, { type RecaptchaHandle } from '../components/Recaptcha';
 
 const BRAND = '#1C398E';
+
+// Section-level theme: recolours primary text/background utilities inside the section.
 const THEME = {
   '--bs-primary': BRAND,
   '--bs-primary-rgb': '28, 57, 142',
   '--bs-primary-bg-subtle': '#e0e7f7',
   '--bs-primary-border-subtle': '#b9c7ea',
   '--bs-primary-text-emphasis': '#122660',
+} as CSSProperties;
+
+// Button variables must be set on the button itself: .btn-primary redeclares them,
+// so values set on a parent section are ignored.
+const BTN_THEME = {
   '--bs-btn-bg': BRAND,
   '--bs-btn-border-color': BRAND,
   '--bs-btn-hover-bg': '#162e73',
@@ -21,8 +29,23 @@ const THEME = {
   '--bs-btn-disabled-border-color': BRAND,
 } as CSSProperties;
 
+// Bootstrap has no ratio-3x2 class, so set the ratio through its CSS variable.
+const RATIO_3X2 = { '--bs-aspect-ratio': '66.6667%' } as CSSProperties;
+
+const ICON_BOX: CSSProperties = { width: 52, height: 52 };
+const HEADER_ICON_BOX: CSSProperties = { width: 44, height: 44 };
+// Height of the reCAPTCHA checkbox. Reserved up front so it never shifts the layout.
+const CAPTCHA_SLOT: CSSProperties = { minHeight: 78 };
+
 /** Anchor id of the inline form. Link to it with href={`#${REQUEST_FORM_ID}`} from anywhere on the page. */
 export const REQUEST_FORM_ID = 'request-staff';
+
+/* ---------- Config ---------- */
+
+const SHEETS_URL = import.meta.env.VITE_SHEETS_URL as string | undefined;
+const SHEETS_SECRET = import.meta.env.VITE_SHEETS_SECRET as string | undefined;
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
+const REQUEST_TIMEOUT_MS = 15000;
 
 /* ---------- Data ---------- */
 
@@ -39,7 +62,6 @@ const GENDERS = ['Male', 'Female', 'Other'] as const;
 const SERVICES = ['Nurses (ANM, GNM, BSc)', 'GDAs (General Duty Assistants)', 'Physiotherapists'] as const;
 const STAFF_COUNTS = ['1', '2', '3', '4', '5'] as const;
 const DIGIT_FIELDS: ReadonlySet<string> = new Set(['mobile', 'pincode']);
-const REQUEST_TIMEOUT_MS = 15000;
 
 /* ---------- Form types, state, validation ---------- */
 
@@ -121,10 +143,15 @@ const SectionTitle = ({ icon: Icon, children }: { icon: LucideIcon; children: Re
 
 const RequestStaffForm = () => {
   const abortRef = useRef<AbortController | null>(null);
+  const captchaRef = useRef<RecaptchaHandle>(null);
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState('');
+  // reCAPTCHA is heavy, so it only loads once the visitor starts using the form
+  const [captchaReady, setCaptchaReady] = useState(false);
 
   // Cancel any in-flight request if the component unmounts
   useEffect(() => () => abortRef.current?.abort(), []);
@@ -134,6 +161,11 @@ const RequestStaffForm = () => {
     const next = DIGIT_FIELDS.has(name) ? value.replace(/\D/g, '') : value;
     setValues((p) => ({ ...p, [name]: next }));
     setErrors((p) => (p[name as keyof FormValues] ? { ...p, [name]: undefined } : p));
+  }, []);
+
+  const handleCaptcha = useCallback((token: string | null) => {
+    setCaptchaToken(token);
+    if (token) setCaptchaError('');
   }, []);
 
   const closeModal = useCallback(() => {
@@ -148,9 +180,15 @@ const RequestStaffForm = () => {
   });
   const cls = (name: keyof FormValues, base = 'form-control') => `${base}${errors[name] ? ' is-invalid' : ''}`;
 
+  const fail = (message: string) => {
+    setErrorMsg(message);
+    setStatus('error');
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status === 'submitting') return;
+    setCaptchaReady(true);
 
     const found = validate(values);
     setErrors(found);
@@ -160,10 +198,10 @@ const RequestStaffForm = () => {
       return;
     }
 
-    const url = import.meta.env.VITE_SHEETS_URL as string | undefined;
-    if (!url) {
-      setErrorMsg('Request service is not configured (VITE_SHEETS_URL missing).');
-      setStatus('error');
+    if (!SHEETS_URL) return fail('Request service is not configured (VITE_SHEETS_URL missing).');
+    if (!RECAPTCHA_SITE_KEY) return fail('Security check is not configured (VITE_RECAPTCHA_SITE_KEY missing).');
+    if (!captchaToken) {
+      setCaptchaError('Please confirm you are not a robot.');
       return;
     }
 
@@ -175,11 +213,10 @@ const RequestStaffForm = () => {
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
-      const secret = import.meta.env.VITE_SHEETS_SECRET as string | undefined;
-      const res = await fetch(url, {
+      const res = await fetch(SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ ...values, secret }),
+        body: JSON.stringify({ ...values, secret: SHEETS_SECRET, captcha: captchaToken }),
         signal: controller.signal,
       });
 
@@ -203,6 +240,8 @@ const RequestStaffForm = () => {
       setStatus('error'); // values are kept so the user can retry without retyping
     } finally {
       clearTimeout(timeout);
+      captchaRef.current?.reset(); // tokens are single-use
+      setCaptchaToken(null);
     }
   };
 
@@ -214,8 +253,8 @@ const RequestStaffForm = () => {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-9 col-xl-10">
             <div className="card border-0 shadow-sm overflow-hidden text-start">
-              <div className="card-header text-bg-primary border-0 p-4 d-flex align-items-start gap-3">
-                <span className="d-inline-flex align-items-center justify-content-center rounded-3 flex-shrink-0 bg-white bg-opacity-25" style={{ width: 44, height: 44 }}>
+              <div className="card-header bg-primary text-white border-0 p-4 d-flex align-items-start gap-3">
+                <span className="d-inline-flex align-items-center justify-content-center rounded-3 flex-shrink-0 bg-white bg-opacity-25" style={HEADER_ICON_BOX}>
                   <HeartPulse size={24} aria-hidden="true" />
                 </span>
                 <div>
@@ -225,7 +264,7 @@ const RequestStaffForm = () => {
                 </div>
               </div>
 
-              <form id={REQUEST_FORM_ID} className="card-body p-4" onSubmit={handleSubmit} noValidate>
+              <form id={REQUEST_FORM_ID} className="card-body p-4" onSubmit={handleSubmit} onFocus={() => setCaptchaReady(true)} noValidate>
                 <fieldset className="mb-4" disabled={isSubmitting}>
                   <SectionTitle icon={UserRound}>Patient and contact</SectionTitle>
                   <div className="row g-3">
@@ -289,8 +328,16 @@ const RequestStaffForm = () => {
                   </div>
                 </fieldset>
 
+                {RECAPTCHA_SITE_KEY && (
+                  <div style={CAPTCHA_SLOT}>
+                    {captchaReady && (
+                      <Recaptcha ref={captchaRef} siteKey={RECAPTCHA_SITE_KEY} onChange={handleCaptcha} error={captchaError} />
+                    )}
+                  </div>
+                )}
+
                 <div className="d-grid d-sm-flex justify-content-sm-end">
-                  <button type="submit" className="btn text-white d-inline-flex align-items-center gap-2" style={{ background: BRAND }} disabled={isSubmitting}>
+                  <button type="submit" className="btn text-white d-inline-flex align-items-center justify-content-center gap-2" style={BTN_THEME} disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <span className="spinner-border spinner-border-sm" aria-hidden="true" />
@@ -325,14 +372,19 @@ const Services = ({ showTitle = true }: ServicesProps) => (
   <>
     <section className="sv-section py-5" style={THEME}>
       <div className="container text-center">
-        {showTitle && (
-          <div className="w-100 title_sec wow fadeInDown" data-wow-delay="0.1s">
+        {showTitle ? (
+          // No wow animation here: this heading is usually the largest paint above the fold,
+          // and WOW keeps it hidden until its script runs, which delays LCP.
+          <div className="w-100 title_sec">
             <h2 className="main-title">Our Core Services</h2>
             <p className="subtitle">
               DigiVera Healthcare Services provides qualified nurses, medical support staff, and
               equipment to hospitals and healthcare institutions across India.
             </p>
           </div>
+        ) : (
+          // Keeps heading order valid (h2 before the h3 cards) when the visible title is hidden
+          <h2 className="visually-hidden">Our Core Services</h2>
         )}
 
         <div className={`row g-4${showTitle ? ' mt-5' : ''}`}>
@@ -340,7 +392,7 @@ const Services = ({ showTitle = true }: ServicesProps) => (
             <div className="col-12 col-md-6 col-lg-4" key={c.id}>
               <article className={`card h-100 text-start border shadow-sm overflow-hidden wow ${c.anim}`} data-wow-delay={c.delay}>
                 <div className="card-body d-flex gap-3">
-                  <div className="bg-primary-subtle rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: 52, height: 52 }}>
+                  <div className="bg-primary-subtle rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style={ICON_BOX}>
                     <img src={`/assets/img/c_${c.id}.png`} alt="" width={32} height={32} loading="lazy" decoding="async" className="object-fit-contain" />
                   </div>
                   <div>
@@ -348,7 +400,7 @@ const Services = ({ showTitle = true }: ServicesProps) => (
                     <p className="card-text text-body-secondary mb-0">{c.text}</p>
                   </div>
                 </div>
-                <div className="ratio ratio-3x2">
+                <div className="ratio" style={RATIO_3X2}>
                   <img src={`/assets/img/c_${c.id}.jpg`} alt={c.alt} width={600} height={400} loading="lazy" decoding="async" className="card-img-bottom object-fit-cover" />
                 </div>
               </article>

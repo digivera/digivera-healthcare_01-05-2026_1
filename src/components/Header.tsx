@@ -7,7 +7,11 @@ const Header = () => {
       <div className="hx-header text-center">
         <div className="container">
           <div className="w-100 d-flex justify-content-between align-items-center header">
-            <div className="mb-0 logobox wow fadeInDown" data-wow-delay="0.1s"><a className="brandlogo" href="/"><img src="/assets/img/logo.png" className="navbar-brand p-0" alt="Logo" /></a></div>
+            <div className="mb-0 logobox wow fadeInDown" data-wow-delay="0.1s">
+              <a className="brandlogo" href="/">
+                <img src="/assets/img/logo.webp" width={1352} height={385} className="mb-3" fetchPriority="high" alt="Logo" style={{ height: 56, width: 'auto' }} />
+              </a>
+            </div>
           </div>
 
           {/* NAVBAR */}

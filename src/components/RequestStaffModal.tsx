@@ -5,6 +5,11 @@ import {
   Send, Stethoscope, User, UserRound, Users, type LucideIcon
 } from 'lucide-react';
 import ResultModal from '../components/Resultmodal';
+import Recaptcha, { type RecaptchaHandle } from '../components/Recaptcha';
+
+
+/* ---------- Config ---------- */
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
 
 declare global {
   interface Window {
@@ -127,10 +132,13 @@ const SectionTitle = ({ icon: Icon, children }: { icon: LucideIcon; children: Re
 
 const RequestStaffModal = () => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const captchaRef = useRef<RecaptchaHandle>(null);
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState('');
 
   const resetForm = useCallback(() => {
     setValues(INITIAL_VALUES);
@@ -158,10 +166,12 @@ const RequestStaffModal = () => {
     },
     []
   );
+  
+   const handleCaptcha = useCallback((token: string | null) => {
+    setCaptchaToken(token);
+    if (token) setCaptchaError('');
+  }, []);
 
-  // Closing the result popup:
-  //  - success: close the form modal too (its hidden event resets the form)
-  //  - error: just dismiss the popup; values are kept so the user can retry
   const closeResult = useCallback(() => {
     if (status === 'success') {
       const instance = modalRef.current ? window.bootstrap?.Modal.getInstance(modalRef.current) : null;
@@ -206,6 +216,10 @@ const RequestStaffModal = () => {
     if (!url) {
       setErrorMsg('VITE_SHEETS_URL is not defined.');
       setStatus('error');
+      return;
+    }
+    if (!captchaToken) {
+      setCaptchaError('Please confirm you are not a robot.');
       return;
     }
 
@@ -349,6 +363,9 @@ const RequestStaffModal = () => {
                 </Field>
               </div>
             </fieldset>
+            {RECAPTCHA_SITE_KEY && (
+                  <Recaptcha ref={captchaRef} siteKey={RECAPTCHA_SITE_KEY} onChange={handleCaptcha} error={captchaError} />
+                )}
           </div>
 
           <div className="modal-footer">

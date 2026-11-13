@@ -3,59 +3,88 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Digivera Healthcare - Home</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta name="keywords"
-    content="Digivera Healthcare, healthcare services, digital healthcare, medical solutions, patient care, healthcare technology, health management, online consultation" />
-  <meta name="description"
-    content="Digivera Healthcare delivers modern, technology-driven healthcare solutions focused on quality patient care, accessibility, and better health outcomes." />
-  <meta name="google-site-verification" content="Sbt5_uMmTWYn2wI2ARaatoyJ0zNd6oP_wDMd8-ncB4Y" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <!-- Icon Font Stylesheet -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- swiper -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <!-- Libraries Stylesheet -->
-  <link href="/assets/lib/animate/animate.min.css" rel="stylesheet">
-  <link href="/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <!-- Customized Bootstrap Stylesheet -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <!-- Template Stylesheet -->
-  <link rel="stylesheet" href="/assets/css/style.min.css" />
+  <meta name="description" content="Digivera Healthcare delivers modern, technology-driven healthcare solutions focused on quality patient care, accessibility, and better health outcomes.">
+  <meta name="google-site-verification" content="Sbt5_uMmTWYn2wI2ARaatoyJ0zNd6oP_wDMd8-ncB4Y">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Social preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Digivera Healthcare">
+  <meta property="og:description"
+    content="Modern, technology-driven healthcare solutions focused on quality patient care and better health outcomes.">
+
   <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon.ico" sizes="any">
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="/assets/lib/wow/wow.min.js"></script>
-  <script src="/assets/lib/easing/easing.min.js"></script>
-  <script src="/assets/lib/waypoints/waypoints.min.js"></script>
-  <script src="/assets/lib/counterup/counterup.min.js"></script>
-  <script src="/assets/lib/owlcarousel/owl.carousel.min.js"></script>
+  <!-- Early connections to third-party hosts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
+  <!-- Font: only the weights actually used (edit if you use others) -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 
-  <!-- Template Javascript -->
-  <script src="/assets/js/main.js"></script>
+  <!-- Critical CSS (render-blocking, in cascade order: framework first, site styles last) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/style.min.css">
+
+  <!-- Non-critical CSS: loaded without blocking first paint -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/assets/lib/animate/animate.min.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/assets/lib/owlcarousel/assets/owl.carousel.min.css"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/assets/lib/animate/animate.min.css">
+    <link rel="stylesheet" href="/assets/lib/owlcarousel/assets/owl.carousel.min.css">
+  </noscript>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script defer src="/assets/lib/wow/wow.min.js"></script>
+  <script defer src="/assets/lib/easing/easing.min.js"></script>
+  <script defer src="/assets/lib/waypoints/waypoints.min.js"></script>
+  <script defer src="/assets/lib/counterup/counterup.min.js"></script>
+  <script defer src="/assets/lib/owlcarousel/owl.carousel.min.js"></script>
 </head>
 
 <body>
-  <main>
-    <div id="root">
-    </div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
-      window.addEventListener('scroll', function () {
-        const nav = document.getElementById('hx-header');
+  <noscript>Please enable JavaScript to view this website.</noscript>
+
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+
+  <script>
+    // Sticky header: toggles the class only when the state actually changes
+    (function () {
+      var sticky = false, ticking = false;
+      function update() {
+        var nav = document.getElementById('hx-header');
+        ticking = false;
         if (!nav) return;
-        nav.classList.toggle('hx-sticky', window.scrollY > 100);
+        var shouldStick = window.scrollY > 100;
+        if (shouldStick !== sticky) {
+          sticky = shouldStick;
+          nav.classList.toggle('hx-sticky', sticky);
+        }
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
       }, { passive: true });
-    </script>
-  </main>
+    })();
+  </script>
 </body>
 
 </html>
