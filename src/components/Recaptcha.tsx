@@ -1,57 +1,79 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 
-/* ---------- Google reCAPTCHA v2 typings ---------- */
+/* ---------- Google reCAPTCHA v2 (checkbox) typings ---------- */
+
+interface RenderOptions {
+  sitekey: string;
+  theme?: 'light' | 'dark';
+  size?: 'normal' | 'compact';
+  callback: (token: string) => void;
+  'expired-callback': () => void;
+  'error-callback': () => void;
+}
 
 interface GReCaptcha {
-  ready: (cb: () => void) => void;
-  render: (el: HTMLElement, opts: {
-    sitekey: string;
-    theme?: 'light' | 'dark';
-    size?: 'normal' | 'compact';
-    callback: (token: string) => void;
-    'expired-callback': () => void;
-    'error-callback': () => void;
-  }) => number;
-  reset: (id?: number) => void;
+  render: (container: HTMLElement, options: RenderOptions) => number;
+  reset: (widgetId?: number) => void;
 }
+
 declare global {
-  interface Window { grecaptcha?: GReCaptcha }
+  interface Window {
+    grecaptcha?: GReCaptcha;
+    __recaptchaOnLoad?: () => void;
+  }
 }
 
-/* ---------- Script loader (shared by all instances, loads once) ---------- */
+/* ---------- Script loader (one script tag for the whole app) ---------- */
 
-let loader: Promise<void> | null = null;
-const loadRecaptcha = (): Promise<void> => {
-  if (window.grecaptcha?.render) return Promise.resolve();
-  loader ??= new Promise<void>((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
-    s.async = true;
-    s.defer = true;
-    s.onload = () => window.grecaptcha!.ready(resolve);
-    s.onerror = () => {
-      loader = null; // allow a retry on the next mount
-      s.remove();
+const SCRIPT_ID = 'google-recaptcha-api';
+const SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js?onload=__recaptchaOnLoad&render=explicit';
+
+let loadPromise: Promise<GReCaptcha> | null = null;
+
+const loadRecaptcha = (): Promise<GReCaptcha> => {
+  // Already fully loaded
+  if (window.grecaptcha?.render) return Promise.resolve(window.grecaptcha);
+  if (loadPromise) return loadPromise;
+
+  loadPromise = new Promise<GReCaptcha>((resolve, reject) => {
+    // Google calls this once the render API is ready
+    window.__recaptchaOnLoad = () => {
+      if (window.grecaptcha?.render) resolve(window.grecaptcha);
+      else reject(new Error('reCAPTCHA API unavailable.'));
+    };
+
+    // Remove a stale/failed tag from an earlier attempt before adding a new one
+    document.getElementById(SCRIPT_ID)?.remove();
+
+    const script = document.createElement('script');
+    script.id = SCRIPT_ID;
+    script.src = SCRIPT_SRC;
+    script.async = true;
+    script.defer = true;
+    script.onerror = () => {
+      loadPromise = null; // allow a retry on the next mount
+      script.remove();
       reject(new Error('reCAPTCHA failed to load.'));
     };
-    document.head.appendChild(s);
+    document.head.appendChild(script);
   });
-  return loader;
+
+  return loadPromise;
 };
 
 /* ---------- Component ---------- */
 
 export interface RecaptchaHandle {
-  /** Clears the checkbox and notifies the parent with onChange(null). */
+  /** Clears the checkbox and calls onChange(null). */
   reset: () => void;
 }
 
 export interface RecaptchaProps {
   siteKey: string;
-  /** Called with a token when solved, or null when it expires, errors or is reset. */
+  /** Token when solved; null when it expires, errors or is reset. */
   onChange: (token: string | null) => void;
-  /** Validation message to show under the widget. */
+  /** Validation message shown under the widget. */
   error?: string;
   theme?: 'light' | 'dark';
   size?: 'normal' | 'compact';
@@ -62,44 +84,70 @@ const Recaptcha = forwardRef<RecaptchaHandle, RecaptchaProps>(function Recaptcha
   { siteKey, onChange, error, theme = 'light', size = 'normal', className = 'my-4' },
   ref,
 ) {
-  const boxRef = useRef<HTMLDivElement>(null);
-  const widgetRef = useRef<number | null>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<number | null>(null);
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange; // always call the latest handler without re-rendering the widget
   const [loadFailed, setLoadFailed] = useState(false);
 
-  useImperativeHandle(ref, () => ({
-    reset: () => {
-      if (widgetRef.current !== null) window.grecaptcha?.reset(widgetRef.current);
-      onChangeRef.current(null); // grecaptcha.reset() does not fire any callback
-    },
-  }), []);
+  // Always call the latest handler without re-rendering the widget
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      reset: () => {
+        if (widgetIdRef.current !== null) window.grecaptcha?.reset(widgetIdRef.current);
+        onChangeRef.current(null); // grecaptcha.reset() fires no callback
+      },
+    }),
+    [],
+  );
 
   useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+
     let cancelled = false;
+    setLoadFailed(false);
+    
+    const mountNode = document.createElement('div');
+    host.appendChild(mountNode);
+
     loadRecaptcha()
-      .then(() => {
-        if (cancelled || !boxRef.current || widgetRef.current !== null) return;
-        widgetRef.current = window.grecaptcha!.render(boxRef.current, {
+      .then((grecaptcha) => {
+        if (cancelled) return;
+        widgetIdRef.current = grecaptcha.render(mountNode, {
           sitekey: siteKey,
           theme,
           size,
-          callback: (t) => onChangeRef.current(t),
+          callback: (token) => onChangeRef.current(token),
           'expired-callback': () => onChangeRef.current(null),
           'error-callback': () => onChangeRef.current(null),
         });
       })
-      .catch(() => { if (!cancelled) setLoadFailed(true); });
-    return () => { cancelled = true; };
+      .catch(() => {
+        if (!cancelled) setLoadFailed(true);
+      });
+
+    return () => {
+      cancelled = true;
+      widgetIdRef.current = null;
+      mountNode.remove();
+    };
   }, [siteKey, theme, size]);
 
   return (
     <div className={className}>
-      <div ref={boxRef} className={error ? 'border border-danger rounded d-inline-block' : undefined} />
+      <div
+        ref={hostRef}
+        className={error ? 'border border-danger rounded d-inline-block' : undefined}
+      />
       {loadFailed && (
         <div className="text-danger small d-flex align-items-center gap-1 mt-1" role="alert">
           <AlertCircle size={14} aria-hidden="true" />
-          Couldn’t load the security check. Disable any blockers and refresh the page.
+          Couldn’t load the security check. Turn off any ad blocker and refresh the page.
         </div>
       )}
       {error && (
