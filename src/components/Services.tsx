@@ -1,6 +1,7 @@
 ﻿import { useCallback, useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type ReactNode } from 'react';
 import {
-  AlertCircle, Building2, ClipboardList, FileText, HeartPulse, Hash, Mail, MapPin, MapPinned, Phone, Send, Stethoscope, User, UserRound, Users, type LucideIcon
+  AlertCircle, Building2, CalendarDays, ClipboardList, FileText, HeartPulse, Hash, Mail, MapPin, MapPinned,
+  Phone, Send, Stethoscope, User, UserRound, Users, type LucideIcon
 } from 'lucide-react';
 import ResultModal from '../components/Resultmodal';
 import Recaptcha, { type RecaptchaHandle } from '../components/Recaptcha';
@@ -16,8 +17,7 @@ const THEME = {
   '--bs-primary-text-emphasis': '#122660',
 } as CSSProperties;
 
-// Button variables must be set on the button itself: .btn-primary redeclares them,
-// so values set on a parent section are ignored.
+// Button variables must be set on the button itself: .btn-primary redeclares them.
 const BTN_THEME = {
   '--bs-btn-bg': BRAND,
   '--bs-btn-border-color': BRAND,
@@ -29,15 +29,12 @@ const BTN_THEME = {
   '--bs-btn-disabled-border-color': BRAND,
 } as CSSProperties;
 
-// Bootstrap has no ratio-3x2 class, so set the ratio through its CSS variable.
-const RATIO_3X2 = { '--bs-aspect-ratio': '66.6667%' } as CSSProperties;
-
 const ICON_BOX: CSSProperties = { width: 52, height: 52 };
 const HEADER_ICON_BOX: CSSProperties = { width: 44, height: 44 };
-// Height of the reCAPTCHA checkbox. Reserved up front so it never shifts the layout.
-const CAPTCHA_SLOT: CSSProperties = { minHeight: 78 };
+const CAPTCHA_SLOT: CSSProperties = { minHeight: 78 }; // reserved so the widget never shifts layout
+const HONEYPOT: CSSProperties = { position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' };
 
-/** Anchor id of the inline form. Link to it with href={`#${REQUEST_FORM_ID}`} from anywhere on the page. */
+/** Anchor id of the inline form. Link to it with href={`#${REQUEST_FORM_ID}`}. */
 export const REQUEST_FORM_ID = 'request-staff';
 
 /* ---------- Config ---------- */
@@ -47,15 +44,22 @@ const SHEETS_SECRET = import.meta.env.VITE_SHEETS_SECRET as string | undefined;
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
 const REQUEST_TIMEOUT_MS = 15000;
 
+// Evaluated once. reCAPTCHA is mandatory: without a site key the form refuses to submit.
+const CONFIG_ERROR = !SHEETS_URL
+  ? 'Request service is not configured (VITE_SHEETS_URL missing).'
+  : !RECAPTCHA_SITE_KEY
+    ? 'Security check is not configured (VITE_RECAPTCHA_SITE_KEY missing).'
+    : null;
+
 /* ---------- Data ---------- */
 
 const SERVICE_CARDS = [
-  { id: 1, title: 'Nursing Staff', text: 'Qualified nurses for all departments: general wards, OPD, and speciality care.', alt: 'Nurse attending to a patient', anim: 'fadeInLeft', delay: '0.1s' },
-  { id: 2, title: 'ICU & Emergency', text: 'Trained critical care staff for ICU, CCU, NICU, and emergency departments.', alt: 'Critical care team in an ICU', anim: 'fadeInDown', delay: '0.1s' },
-  { id: 3, title: 'Medical Coordinators', text: 'Patient care coordinators and medical operations support staff.', alt: 'Medical coordinator at a hospital desk', anim: 'fadeInRight', delay: '0.1s' },
-  { id: 4, title: 'Medical Equipment', text: 'Supply of essential medical equipment and consumables to hospitals.', alt: 'Medical equipment', anim: 'fadeInLeft', delay: '0.2s' },
-  { id: 5, title: 'Ward Boys & Attendants', text: 'Reliable ward boys, patient attendants, and hospital support staff.', alt: 'Hospital attendants with a patient', anim: 'fadeInUp', delay: '0.2s' },
-  { id: 6, title: 'Manpower Outsourcing', text: 'End-to-end hospital manpower outsourcing and managed staffing solutions.', alt: 'Hospital staffing team', anim: 'fadeInRight', delay: '0.2s' },
+  { id: 1, title: 'Nursing Staff', text: 'Qualified nurses for all departments: general wards, OPD, and speciality care.', anim: 'fadeInLeft', delay: '0.1s' },
+  { id: 2, title: 'ICU & Emergency', text: 'Trained critical care staff for ICU, CCU, NICU, and emergency departments.', anim: 'fadeInDown', delay: '0.1s' },
+  { id: 3, title: 'Medical Coordinators', text: 'Patient care coordinators and medical operations support staff.', anim: 'fadeInRight', delay: '0.1s' },
+  { id: 4, title: 'Medical Equipment', text: 'Supply of essential medical equipment and consumables to hospitals.', anim: 'fadeInLeft', delay: '0.2s' },
+  { id: 5, title: 'Ward Boys & Attendants', text: 'Reliable ward boys, patient attendants, and hospital support staff.', anim: 'fadeInUp', delay: '0.2s' },
+  { id: 6, title: 'Manpower Outsourcing', text: 'End-to-end hospital manpower outsourcing and managed staffing solutions.', anim: 'fadeInRight', delay: '0.2s' },
 ] as const;
 
 const GENDERS = ['Male', 'Female', 'Other'] as const;
@@ -73,6 +77,27 @@ interface FormValues {
 type Errors = Partial<Record<keyof FormValues, string>>;
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
+// Apps Script cannot return real HTTP status codes, so the backend sends a `code` in the JSON.
+interface ServerResponse { ok?: boolean; code?: string; error?: string; fields?: Errors }
+
+class ApiError extends Error {
+  public code: string;
+  public fields?: Errors;
+
+  constructor(code: string, message: string, fields?: Errors) {
+    super(message);
+    this.code = code;
+    this.fields = fields;
+  }
+}
+
+const ERROR_MESSAGES: Record<string, string> = {
+  CAPTCHA_FAILED: 'The security check expired or failed. Please tick the box again.',
+  RATE_LIMITED: 'We already received a request from this number. Please wait a minute before sending another.',
+  SERVER: 'Something went wrong on our side. Please try again shortly.',
+};
+const CAPTCHA_REQUIRED_MSG = 'Please confirm you are not a robot.';
+
 const INITIAL_VALUES: FormValues = {
   patientName: '', gender: '', mobile: '', email: '', address: '', locality: '', city: '',
   pincode: '', service: '', staffCount: '', startDate: '', condition: '', notes: '',
@@ -87,24 +112,30 @@ const todayISO = () => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 };
 
+const MOBILE_RE = /^[6-9]\d{9}$/;
+const PIN_RE = /^\d{6}$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // Keys are added in on-screen order so the first error receives focus
 const validate = (v: FormValues): Errors => {
   const e: Errors = {};
   if (!v.patientName.trim()) e.patientName = 'Enter the patient’s full name.';
   if (!v.gender) e.gender = 'Select a gender.';
   if (!v.mobile) e.mobile = 'Enter a mobile number.';
-  else if (!/^[6-9]\d{9}$/.test(v.mobile)) e.mobile = 'Enter a valid 10-digit mobile number.';
-  if (v.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) e.email = 'Enter a valid email address.';
+  else if (!MOBILE_RE.test(v.mobile)) e.mobile = 'Enter a valid 10-digit mobile number.';
+  if (v.email && !EMAIL_RE.test(v.email)) e.email = 'Enter a valid email address.';
   if (!v.address.trim()) e.address = 'Enter the house / flat number and street.';
   if (!v.locality.trim()) e.locality = 'Enter the area / locality.';
   if (!v.city.trim()) e.city = 'Enter the city.';
   if (!v.pincode) e.pincode = 'Enter the PIN code.';
-  else if (!/^\d{6}$/.test(v.pincode)) e.pincode = 'Enter a valid 6-digit PIN code.';
+  else if (!PIN_RE.test(v.pincode)) e.pincode = 'Enter a valid 6-digit PIN code.';
   if (!v.service) e.service = 'Select the service you need.';
   if (!v.staffCount) e.staffCount = 'Select how many staff you need.';
   if (v.startDate && v.startDate < todayISO()) e.startDate = 'Choose today or a later date.';
   return e;
 };
+
+const focusField = (name: string) => document.getElementById(fieldId(name as keyof FormValues))?.focus();
 
 /* ---------- Presentational helpers (Bootstrap classes only) ---------- */
 
@@ -142,16 +173,16 @@ const SectionTitle = ({ icon: Icon, children }: { icon: LucideIcon; children: Re
 /* ---------- Inline request form ---------- */
 
 const RequestStaffForm = () => {
-  const abortRef = useRef<AbortController | null>(null);
+  const abortRef = useRef<AbortController | null>(null); // non-null while a request is in flight
   const captchaRef = useRef<RecaptchaHandle>(null);
+  const captchaSlotRef = useRef<HTMLDivElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [captchaError, setCaptchaError] = useState('');
-  // reCAPTCHA is heavy, so it only loads once the visitor starts using the form
-  const [captchaReady, setCaptchaReady] = useState(false);
 
   // Cancel any in-flight request if the component unmounts
   useEffect(() => () => abortRef.current?.abort(), []);
@@ -163,6 +194,7 @@ const RequestStaffForm = () => {
     setErrors((p) => (p[name as keyof FormValues] ? { ...p, [name]: undefined } : p));
   }, []);
 
+  // Called with a token on success and with null when the token expires or the widget resets
   const handleCaptcha = useCallback((token: string | null) => {
     setCaptchaToken(token);
     if (token) setCaptchaError('');
@@ -173,35 +205,44 @@ const RequestStaffForm = () => {
     setErrorMsg('');
   }, []);
 
-  const bind = (name: keyof FormValues) => ({
+  const bind = (name: keyof FormValues, required = false) => ({
     id: fieldId(name), name, value: values[name], onChange: handleChange,
+    'aria-required': required || undefined,
     'aria-invalid': errors[name] ? true : undefined,
     'aria-describedby': errors[name] ? `${fieldId(name)}-error` : undefined,
   });
   const cls = (name: keyof FormValues, base = 'form-control') => `${base}${errors[name] ? ' is-invalid' : ''}`;
 
-  const fail = (message: string) => {
-    setErrorMsg(message);
-    setStatus('error');
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (status === 'submitting') return;
-    setCaptchaReady(true);
+    if (abortRef.current) return; // a request is already running (guards against double submit)
 
-    const found = validate(values);
-    setErrors(found);
-    const firstInvalid = Object.keys(found)[0];
-    if (firstInvalid) {
-      document.getElementById(fieldId(firstInvalid as keyof FormValues))?.focus();
+    // Bot filled the hidden field: pretend success and send nothing
+    if (honeypotRef.current?.value) {
+      setValues(INITIAL_VALUES);
+      setStatus('success');
       return;
     }
 
-    if (!SHEETS_URL) return fail('Request service is not configured (VITE_SHEETS_URL missing).');
-    if (!RECAPTCHA_SITE_KEY) return fail('Security check is not configured (VITE_RECAPTCHA_SITE_KEY missing).');
-    if (!captchaToken) {
-      setCaptchaError('Please confirm you are not a robot.');
+    if (CONFIG_ERROR) {
+      setErrorMsg(CONFIG_ERROR);
+      setStatus('error');
+      return;
+    }
+
+    // Validate fields AND captcha together so the user sees every problem at once
+    const found = validate(values);
+    const captchaMissing = !captchaToken;
+    setErrors(found);
+    setCaptchaError(captchaMissing ? CAPTCHA_REQUIRED_MSG : '');
+
+    const firstInvalid = Object.keys(found)[0];
+    if (firstInvalid) {
+      focusField(firstInvalid);
+      return;
+    }
+    if (captchaMissing) {
+      captchaSlotRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -210,37 +251,61 @@ const RequestStaffForm = () => {
 
     const controller = new AbortController();
     abortRef.current = controller;
-    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    let timedOut = false;
+    const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, REQUEST_TIMEOUT_MS);
 
     try {
-      const res = await fetch(SHEETS_URL, {
+      const res = await fetch(SHEETS_URL!, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ ...values, secret: SHEETS_SECRET, captcha: captchaToken }),
+        body: JSON.stringify({ ...values, secret: SHEETS_SECRET, captcha: captchaToken, company_url: '' }),
         signal: controller.signal,
       });
 
-      let data: { ok?: boolean; error?: string };
+      let data: ServerResponse;
       try {
         data = JSON.parse(await res.text());
       } catch {
-        throw new Error('Server returned an unexpected response.');
+        throw new ApiError('SERVER', ERROR_MESSAGES.SERVER);
       }
-      if (!data.ok) throw new Error(data.error || 'Request failed.');
+      if (!data.ok) {
+        throw new ApiError(
+          data.code ?? 'UNKNOWN',
+          ERROR_MESSAGES[data.code ?? ''] ?? data.error ?? 'Request failed.',
+          data.fields
+        );
+      }
 
-      // Success: reset the form and show the modal
       setValues(INITIAL_VALUES);
       setErrors({});
       setStatus('success');
     } catch (err) {
+      // Aborted by unmount, not by the timeout: the component is gone, nothing to update
+      if (controller.signal.aborted && !timedOut) return;
+
+      if (err instanceof ApiError) {
+        if (err.code === 'CAPTCHA_FAILED') {
+          setCaptchaError(err.message);
+          setStatus('idle');
+          return;
+        }
+        if (err.code === 'INVALID_FIELDS' && err.fields) {
+          setErrors(err.fields);
+          setStatus('idle');
+          const first = Object.keys(err.fields)[0];
+          if (first) focusField(first);
+          return;
+        }
+      }
       setErrorMsg(
-        controller.signal.aborted ? 'The request timed out. Check your connection and try again.'
+        timedOut ? 'The request timed out. Check your connection and try again.'
           : err instanceof Error ? err.message : 'Unknown error'
       );
       setStatus('error'); // values are kept so the user can retry without retyping
     } finally {
       clearTimeout(timeout);
-      captchaRef.current?.reset(); // tokens are single-use
+      abortRef.current = null;
+      captchaRef.current?.reset(); // tokens are single-use, so the user must tick again
       setCaptchaToken(null);
     }
   };
@@ -259,26 +324,26 @@ const RequestStaffForm = () => {
                 </span>
                 <div>
                   <p className="mb-1 small opacity-75">DigiVera Healthcare Services</p>
-                  <h2 className="h4 mb-1" id={`${REQUEST_FORM_ID}-title`}>Request home care staff</h2>
+                  <h2 className="h4 mb-1 text-white" id={`${REQUEST_FORM_ID}-title`}>Request home care staff</h2>
                   <p className="mb-0 small opacity-75">Tell us what you need. Our care team will call you to confirm.</p>
                 </div>
               </div>
 
-              <form id={REQUEST_FORM_ID} className="card-body p-4" onSubmit={handleSubmit} onFocus={() => setCaptchaReady(true)} noValidate>
+              <form id={REQUEST_FORM_ID} className="card-body p-4" onSubmit={handleSubmit} noValidate>
                 <fieldset className="mb-4" disabled={isSubmitting}>
                   <SectionTitle icon={UserRound}>Patient and contact</SectionTitle>
                   <div className="row g-3">
                     <Field name="patientName" label="Patient full name" icon={User} required error={errors.patientName} className="col-12">
-                      <input type="text" className={cls('patientName')} autoComplete="off" {...bind('patientName')} />
+                      <input type="text" className={cls('patientName')} autoComplete="off" {...bind('patientName', true)} />
                     </Field>
                     <Field name="gender" label="Gender" icon={Users} required error={errors.gender}>
-                      <select className={cls('gender', 'form-select')} {...bind('gender')}>
+                      <select className={cls('gender', 'form-select')} {...bind('gender', true)}>
                         <option value="">Select</option>
                         {GENDERS.map((g) => <option key={g} value={g}>{g}</option>)}
                       </select>
                     </Field>
                     <Field name="mobile" label="Mobile / WhatsApp" icon={Phone} required error={errors.mobile}>
-                      <input type="tel" inputMode="numeric" maxLength={10} className={cls('mobile')} autoComplete="tel-national" placeholder="10-digit number" {...bind('mobile')} />
+                      <input type="tel" inputMode="numeric" maxLength={10} className={cls('mobile')} autoComplete="tel-national" placeholder="10-digit number" {...bind('mobile', true)} />
                     </Field>
                     <Field name="email" label="Email" icon={Mail} error={errors.email} className="col-12">
                       <input type="email" className={cls('email')} autoComplete="email" {...bind('email')} />
@@ -290,16 +355,16 @@ const RequestStaffForm = () => {
                   <SectionTitle icon={MapPin}>Where care is needed</SectionTitle>
                   <div className="row g-3">
                     <Field name="address" label="House / flat number and street" icon={Building2} required error={errors.address} className="col-12">
-                      <input type="text" className={cls('address')} autoComplete="address-line1" {...bind('address')} />
+                      <input type="text" className={cls('address')} autoComplete="address-line1" {...bind('address', true)} />
                     </Field>
                     <Field name="locality" label="Area / locality" icon={MapPinned} required error={errors.locality} className="col-12">
-                      <input type="text" className={cls('locality')} autoComplete="address-line2" {...bind('locality')} />
+                      <input type="text" className={cls('locality')} autoComplete="address-line2" {...bind('locality', true)} />
                     </Field>
                     <Field name="city" label="City" icon={Building2} required error={errors.city}>
-                      <input type="text" className={cls('city')} autoComplete="address-level2" {...bind('city')} />
+                      <input type="text" className={cls('city')} autoComplete="address-level2" {...bind('city', true)} />
                     </Field>
                     <Field name="pincode" label="PIN code" icon={Hash} required error={errors.pincode}>
-                      <input type="text" inputMode="numeric" maxLength={6} className={cls('pincode')} autoComplete="postal-code" {...bind('pincode')} />
+                      <input type="text" inputMode="numeric" maxLength={6} className={cls('pincode')} autoComplete="postal-code" {...bind('pincode', true)} />
                     </Field>
                   </div>
                 </fieldset>
@@ -308,36 +373,53 @@ const RequestStaffForm = () => {
                   <SectionTitle icon={Stethoscope}>Service required</SectionTitle>
                   <div className="row g-3">
                     <Field name="service" label="Service" icon={ClipboardList} required error={errors.service}>
-                      <select className={cls('service', 'form-select')} {...bind('service')}>
+                      <select className={cls('service', 'form-select')} {...bind('service', true)}>
                         <option value="">Select</option>
                         {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </Field>
                     <Field name="staffCount" label="Number of staff" icon={Users} required error={errors.staffCount}>
-                      <select className={cls('staffCount', 'form-select')} {...bind('staffCount')}>
+                      <select className={cls('staffCount', 'form-select')} {...bind('staffCount', true)}>
                         <option value="">Select</option>
                         {STAFF_COUNTS.map((n) => <option key={n} value={n}>{n}</option>)}
                       </select>
                     </Field>
-                    <Field name="condition" label="Reason for care" icon={HeartPulse} className="col-12">
-                      <textarea rows={3} maxLength={500} className="form-control" placeholder="For example: recovering from hip surgery, needs help walking and bathing" {...bind('condition')} />
+                    <Field name="startDate" label="Preferred start date" icon={CalendarDays} error={errors.startDate} className="col-12">
+                      <input type="date" min={todayISO()} className={cls('startDate')} {...bind('startDate')} />
                     </Field>
-                    <Field name="notes" label="Additional notes" icon={FileText} className="col-12">
-                      <textarea rows={2} maxLength={500} className="form-control" {...bind('notes')} />
+                    <Field name="condition" label="Reason for care" icon={HeartPulse} error={errors.condition} className="col-12">
+                      <textarea rows={3} maxLength={500} className={cls('condition')} placeholder="For example: recovering from hip surgery, needs help walking and bathing" {...bind('condition')} />
+                    </Field>
+                    <Field name="notes" label="Additional notes" icon={FileText} error={errors.notes} className="col-12">
+                      <textarea rows={2} maxLength={500} className={cls('notes')} {...bind('notes')} />
                     </Field>
                   </div>
                 </fieldset>
 
-                {RECAPTCHA_SITE_KEY && (
-                  <div style={CAPTCHA_SLOT}>
-                    {captchaReady && (
-                      <Recaptcha ref={captchaRef} siteKey={RECAPTCHA_SITE_KEY} onChange={handleCaptcha} error={captchaError} />
-                    )}
-                  </div>
-                )}
+                {/* Honeypot: hidden from people and screen readers, bots tend to fill it */}
+                <div style={HONEYPOT} aria-hidden="true">
+                  <label htmlFor="rs-company_url">Company website</label>
+                  <input type="text" id="rs-company_url" name="company_url" tabIndex={-1} autoComplete="off" ref={honeypotRef} />
+                </div>
+
+                {/* reCAPTCHA is mandatory: if the key is missing we say so instead of silently hiding it */}
+                <div style={CAPTCHA_SLOT} ref={captchaSlotRef} className="mb-3">
+                  {RECAPTCHA_SITE_KEY ? (
+                    <Recaptcha ref={captchaRef} siteKey={RECAPTCHA_SITE_KEY} onChange={handleCaptcha} error={captchaError} />
+                  ) : (
+                    <div className="alert alert-warning small mb-0" role="alert">
+                      Security check is unavailable, so requests cannot be sent right now.
+                    </div>
+                  )}
+                </div>
 
                 <div className="d-grid d-sm-flex justify-content-sm-end">
-                  <button type="submit" className="btn text-white d-inline-flex align-items-center justify-content-center gap-2" style={BTN_THEME} disabled={isSubmitting}>
+                  <button
+                    type="submit"
+                    className="btn text-white d-inline-flex align-items-center justify-content-center gap-2"
+                    style={BTN_THEME}
+                    disabled={isSubmitting || !RECAPTCHA_SITE_KEY}
+                  >
                     {isSubmitting ? (
                       <>
                         <span className="spinner-border spinner-border-sm" aria-hidden="true" />
@@ -373,8 +455,6 @@ const Services = ({ showTitle = true }: ServicesProps) => (
     <section className="sv-section py-5" style={THEME}>
       <div className="container text-center">
         {showTitle ? (
-          // No wow animation here: this heading is usually the largest paint above the fold,
-          // and WOW keeps it hidden until its script runs, which delays LCP.
           <div className="w-100 title_sec">
             <h2 className="main-title">Our Core Services</h2>
             <p className="subtitle">
@@ -393,15 +473,12 @@ const Services = ({ showTitle = true }: ServicesProps) => (
               <article className={`card h-100 text-start border shadow-sm overflow-hidden wow ${c.anim}`} data-wow-delay={c.delay}>
                 <div className="card-body d-flex gap-3">
                   <div className="bg-primary-subtle rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style={ICON_BOX}>
-                    <img src={`/assets/img/c_${c.id}.png`} alt="" width={32} height={32} loading="lazy" decoding="async" className="object-fit-contain" />
+                    <img src={`/assets/img/c_${c.id}.webp`} alt="" width={32} height={32} loading="lazy" decoding="async" className="object-fit-contain" />
                   </div>
                   <div>
                     <h3 className="h5 card-title text-primary-emphasis">{c.title}</h3>
                     <p className="card-text text-body-secondary mb-0">{c.text}</p>
                   </div>
-                </div>
-                <div className="ratio" style={RATIO_3X2}>
-                  <img src={`/assets/img/c_${c.id}.jpg`} alt={c.alt} width={600} height={400} loading="lazy" decoding="async" className="card-img-bottom object-fit-cover" />
                 </div>
               </article>
             </div>
